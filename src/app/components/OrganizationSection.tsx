@@ -26,14 +26,14 @@ export function OrganizationSection() {
       role: 'Director Effie Red',
       organization: 'Valora LATAM',
       image: diegoImg,
-      linkedin: '#',
+      linkedin: 'https://www.linkedin.com/in/diegohermosilla/',
     },
     {
       name: 'Pablo Oyarzún',
       role: 'Director de Programas',
       organization: 'Effie Red Valora LATAM',
       image: pabloImg,
-      linkedin: '#',
+      linkedin: 'https://www.linkedin.com/in/pablo-oyarz%C3%BAn-geiger-48620631/',
     },
   ];
 
