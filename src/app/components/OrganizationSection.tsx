@@ -12,7 +12,7 @@ export function OrganizationSection() {
       role: 'Director Effie',
       organization: 'Valora Paraguay',
       image: rodrigoImg,
-      linkedin: '#',
+      linkedin: 'https://www.linkedin.com/in/weiberlen/',
     },
     {
       name: 'Andrea Ferreira',
