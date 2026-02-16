@@ -448,7 +448,7 @@ export function TimelineSection() {
               e.currentTarget.style.color = '#000000';
             }}
           >
-            <span>Inscribite ahora</span>
+            <span>Postulá ahora</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </motion.a>
         </motion.div>
