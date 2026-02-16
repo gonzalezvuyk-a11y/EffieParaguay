@@ -181,7 +181,7 @@ export function AboutSection() {
                 {[
                   { number: '50+', label: 'Países' },
                   { number: '1968', label: 'Fundación' },
-                  { number: '#1', label: 'Premio en Eficacia' },
+                  { number: '#1', label: 'Reconocimiento en efectividad' },
                   { number: '1000+', label: 'Ganadores Anuales' },
                 ].map((stat, index) => (
                   <motion.div
