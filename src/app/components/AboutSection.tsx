@@ -70,7 +70,7 @@ export function AboutSection() {
             >Effie Awards</span>?
           </h2>
           <p className="text-xl leading-relaxed" style={{ color: '#4a4a4a' }}>
-            Effie Awards es el único premio que reconoce la eficacia en marketing y comunicación. 
+            Effie Awards es el único premio que reconoce la efectividad en marketing y comunicación. 
             Desde su creación en 1968, Effie se ha convertido en el símbolo global de logros en marketing 
             efectivo, destacando las ideas que funcionan y fomentan el pensamiento estratégico.
           </p>
@@ -166,7 +166,7 @@ export function AboutSection() {
                 </div>
                 
                 <h3 className="text-3xl md:text-4xl" style={{ color: '#1a1a1a', fontWeight: 450 }}>
-                  El Índice de Eficacia
+                  El Índice de Efectividad
                 </h3>
                 
                 <p className="text-base leading-relaxed" style={{ color: '#4a4a4a' }}>
