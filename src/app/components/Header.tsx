@@ -184,7 +184,7 @@ export function Header() {
                 }}
                 onClick={() => window.open(REGISTRATION_URL, '_blank', 'noopener,noreferrer')}
               >
-                Inscríbete
+                Postulá
               </motion.button>
             </motion.div>
           )}
