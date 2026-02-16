@@ -5,6 +5,8 @@ import effieGif from '../../assets/0a75d0ddf2653507a1ac14e86fc1c8bd276cf698.png'
 import { DotsPattern } from './DotsPattern';
 import { MagneticButton } from './MagneticButton';
 
+const REGISTRATION_URL = 'https://effie-paraguay.acclaimworks.com/uba/auth';
+
 interface TimeLeft {
   days: number;
   hours: number;
@@ -228,7 +230,7 @@ export function HeroSection() {
                     e.currentTarget.style.backgroundColor = '#B89650';
                     e.currentTarget.style.color = '#000000';
                   }}
-                  onClick={() => window.open('https://effie-paraguay.acclaimworks.com/uba/auth', '_blank')}
+                  onClick={() => window.open(REGISTRATION_URL, '_blank', 'noopener,noreferrer')}
                 >
                   <span>Inscríbete ahora</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
