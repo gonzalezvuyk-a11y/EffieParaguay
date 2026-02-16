@@ -252,7 +252,7 @@ export function EffieLatamSection() {
 
             <MagneticButton
               as="a"
-              href="https://effie.org"
+              href="https://effie.org/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-10 py-5 rounded-full font-medium transition-all group text-base"
