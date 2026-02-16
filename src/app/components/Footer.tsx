@@ -183,7 +183,15 @@ export function Footer() {
                 © 2026 Effie Awards Paraguay. Todos los derechos reservados.
               </p>
               <p className="text-sm" style={{ color: '#666' }}>
-                Desarrollado por <span style={{ color: '#B89650', fontWeight: 500 }}>ICON</span>
+                 Desarrollado por{' '} <a
+                                           href="https://iconlat.com"
+                                         target="_blank"
+                                         rel="noopener noreferrer"
+                                         className="transition-opacity hover:opacity-80"
+                                         style={{ color: '#B89650', fontWeight: 500 }}
+                                         >
+                   ICON
+                 </a>
               </p>
             </div>
             <p className="text-xs text-center mt-6" style={{ color: '#555' }}>
