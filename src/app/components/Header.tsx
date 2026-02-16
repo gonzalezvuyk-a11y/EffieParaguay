@@ -123,6 +123,7 @@ export function Header() {
                 backgroundColor: '#B89650',
                 color: '#000000',
               }}
+              onClick={() => window.open('https://effie-paraguay.acclaimworks.com/uba/auth', '_blank')}
             >
               Inscríbete
             </motion.button>
@@ -179,6 +180,7 @@ export function Header() {
                   backgroundColor: '#B89650',
                   color: '#000000',
                 }}
+                onClick={() => window.open('https://effie-paraguay.acclaimworks.com/uba/auth', '_blank')}
               >
                 Inscríbete
               </motion.button>

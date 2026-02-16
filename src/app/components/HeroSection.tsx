@@ -228,6 +228,7 @@ export function HeroSection() {
                     e.currentTarget.style.backgroundColor = '#B89650';
                     e.currentTarget.style.color = '#000000';
                   }}
+                  onClick={() => window.open('https://effie-paraguay.acclaimworks.com/uba/auth', '_blank')}
                 >
                   <span>Inscríbete ahora</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
