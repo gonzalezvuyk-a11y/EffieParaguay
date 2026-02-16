@@ -28,6 +28,7 @@ export function TimelineSection() {
       title: 'Workshop 1: Todo sobre Effie',
       date: '23 de febrero',
       description: 'Inscribite aquí',
+      url: 'https://koga-py.zoom.us/meeting/register/OsnJd71oRy25q7C5NCL3lw#/registration',
       align: 'left',
     },
     {
@@ -39,12 +40,14 @@ export function TimelineSection() {
       title: 'Workshop 2: ¿Cómo postular?',
       date: '4 de marzo',
       description: 'Inscribite aquí',
+      url: 'https://koga-py.zoom.us/meeting/register/T977605MRT6Ioo5yNVutiA#/',
       align: 'left',
     },
     {
       title: 'Workshop 3: Criterios y Categorías',
       date: '19 de marzo',
       description: 'Inscribite aquí',
+      url: 'https://koga-py.zoom.us/meeting/register/cyQWL6dmT0OUOMvgNP9sPg#/registration',
       align: 'right',
     },
     {
@@ -56,6 +59,7 @@ export function TimelineSection() {
       title: 'Workshop 4: Análisis de casos',
       date: '29 de abril',
       description: 'Inscribite aquí',
+      url: 'https://koga-py.zoom.us/meeting/register/HjlAWxRNQo2yh9RmwUuA6A#/registration',
       align: 'right',
     },
     {
@@ -236,7 +240,13 @@ export function TimelineSection() {
                           </div>
                           {event.description && (
                             <div className="mt-3">
-                              <a href="#" className="text-sm font-medium hover:underline inline-flex items-center gap-1" style={{ color: '#B89650' }}>
+                              <a 
+                                href={event.url || '#'} 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm font-medium hover:underline inline-flex items-center gap-1" 
+                                style={{ color: '#B89650' }}
+                              >
                                 {event.description}
                                 <ArrowRight className="w-3.5 h-3.5" />
                               </a>
@@ -309,7 +319,13 @@ export function TimelineSection() {
                           </div>
                           {event.description && (
                             <div className="mt-4">
-                              <a href="#" className="text-sm font-medium hover:underline inline-flex items-center gap-1" style={{ color: '#B89650' }}>
+                              <a 
+                                href={event.url || '#'} 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm font-medium hover:underline inline-flex items-center gap-1" 
+                                style={{ color: '#B89650' }}
+                              >
                                 {event.description}
                                 <ArrowRight className="w-3.5 h-3.5" />
                               </a>
@@ -380,7 +396,13 @@ export function TimelineSection() {
                       </div>
                       {event.description && (
                         <div className="mt-3">
-                          <a href="#" className="text-sm font-medium hover:underline inline-flex items-center gap-1" style={{ color: '#B89650' }}>
+                          <a 
+                            href={event.url || '#'} 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm font-medium hover:underline inline-flex items-center gap-1" 
+                            style={{ color: '#B89650' }}
+                          >
                             {event.description}
                             <ArrowRight className="w-3.5 h-3.5" />
                           </a>
