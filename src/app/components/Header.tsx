@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import effieLogo from '../../assets/50ca5ee8af00d3d0e3dfb019f7124297732c358e.png';
 import effieLogoLight from '../../assets/8b95d916e317d94d42fa2064da5c9ed583c35a80.png';
 
+const REGISTRATION_URL = 'https://effie-paraguay.acclaimworks.com/uba/auth';
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -123,6 +125,7 @@ export function Header() {
                 backgroundColor: '#B89650',
                 color: '#000000',
               }}
+              onClick={() => window.open(REGISTRATION_URL, '_blank', 'noopener,noreferrer')}
             >
               Inscríbete
             </motion.button>
@@ -179,6 +182,7 @@ export function Header() {
                   backgroundColor: '#B89650',
                   color: '#000000',
                 }}
+                onClick={() => window.open(REGISTRATION_URL, '_blank', 'noopener,noreferrer')}
               >
                 Inscríbete
               </motion.button>
