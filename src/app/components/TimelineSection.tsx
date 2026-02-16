@@ -431,6 +431,7 @@ export function TimelineSection() {
             href="https://effie-paraguay.acclaimworks.com/uba/auth"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Inscribite ahora (abre en nueva pestaña)"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-medium transition-all"
