@@ -180,7 +180,7 @@ export function HeroSection() {
                 className="text-5xl md:text-6xl lg:text-7xl leading-tight"
                 style={{ color: '#FFFFFF', fontWeight: 450 }}
               >
-                Premiando la
+                Reconociendo la
                 <br />
                 <span 
                   style={{ 
