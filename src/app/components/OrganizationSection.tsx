@@ -19,7 +19,7 @@ export function OrganizationSection() {
       role: 'Coordinadora',
       organization: 'General',
       image: andreaImg,
-      linkedin: '#',
+      linkedin: 'https://www.linkedin.com/in/andrea-ferreira-destefani/',
     },
     {
       name: 'Diego Hermosilla',
