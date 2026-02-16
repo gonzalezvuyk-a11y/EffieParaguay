@@ -91,7 +91,7 @@ export function EffieLatamSection() {
                 fontWeight: 500
               }}
             >
-              Premiando ideas que funcionan
+              Reconociendo ideas que funcionan
             </div>
           </motion.div>
 
