@@ -180,7 +180,7 @@ export function HeroSection() {
                 className="text-5xl md:text-6xl lg:text-7xl leading-tight"
                 style={{ color: '#FFFFFF', fontWeight: 450 }}
               >
-                Reconociendo la
+                Reconociendo
                 <br />
                 <span 
                   style={{ 
@@ -192,7 +192,7 @@ export function HeroSection() {
                     fontWeight: 450,
                   }}
                 >
-                  Efectividad en Marketing
+                  la Efectividad en Marketing
                 </span>
               </motion.h1>
 
