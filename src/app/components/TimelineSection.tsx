@@ -427,7 +427,10 @@ export function TimelineSection() {
             Las inscripciones incluyen tres fechas de cierre con tarifas diferenciadas
           </p>
           
-          <motion.button
+          <motion.a
+            href="https://effie-paraguay.acclaimworks.com/uba/auth"
+            target="_blank"
+            rel="noopener noreferrer"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="group inline-flex items-center gap-3 px-8 py-4 rounded-full font-medium transition-all"
@@ -446,7 +449,7 @@ export function TimelineSection() {
           >
             <span>Inscribite ahora</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </motion.button>
+          </motion.a>
         </motion.div>
       </div>
     </section>
