@@ -9,7 +9,7 @@ export function AboutSection() {
     {
       icon: Target,
       title: 'Enfoque en Resultados',
-      description: 'Premiamos campañas que demuestran eficacia medible y resultados tangibles en los objetivos de negocio.',
+      description: 'Reconocemos campañas que demuestran eficacia medible y resultados tangibles en los objetivos de negocio.',
     },
     {
       icon: Lightbulb,
