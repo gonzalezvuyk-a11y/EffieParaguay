@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import { ScrollProgress } from './components/ScrollProgress';
 import { SectionDivider } from './components/SectionDivider';
 import { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function App() {
         <ContactSection />
       </main>
       <Footer />
+      <Analytics />
     </div>
   );
 }
