@@ -232,7 +232,7 @@ export function HeroSection() {
                   }}
                   onClick={() => window.open(REGISTRATION_URL, '_blank', 'noopener,noreferrer')}
                 >
-                  <span>Inscríbete ahora</span>
+                  <span>Postulá ahora</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
               </motion.div>
