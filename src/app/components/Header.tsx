@@ -53,6 +53,9 @@ export function Header() {
     return `#${activeSection}` === href;
   };
 
+  const mobileMenuTextColor = scrolled && isLightSection ? '#1a1a1a' : '#FFFFFF';
+  const mobileMenuHoverBg = scrolled && isLightSection ? 'rgba(26, 26, 26, 0.08)' : '#111111';
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -159,14 +162,14 @@ export function Header() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className="block text-sm tracking-wide transition-colors duration-300 py-2 px-4 rounded-lg"
-                  style={{ color: '#FFFFFF' }}
+                  style={{ color: mobileMenuTextColor }}
                   onClick={() => setIsMenuOpen(false)}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.color = '#B89650';
-                    e.currentTarget.style.backgroundColor = '#111111';
+                    e.currentTarget.style.backgroundColor = mobileMenuHoverBg;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = '#FFFFFF';
+                    e.currentTarget.style.color = mobileMenuTextColor;
                     e.currentTarget.style.backgroundColor = 'transparent';
                   }}
                 >
