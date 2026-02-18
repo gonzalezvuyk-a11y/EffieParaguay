@@ -58,6 +58,8 @@ export function Footer() {
                   <motion.a
                     key={index}
                     href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     className="w-10 h-10 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-all group"
