@@ -14,7 +14,7 @@ export function Footer() {
       { label: 'Bases y Condiciones', href: '#' },
       { label: 'Guía de Inscripción', href: '#' },
       { label: 'Contacto', href: '#contacto' },
-    ],ef
+    ],
   };
 
   const socialLinks = [
