@@ -217,7 +217,7 @@ export function HeroSection() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group px-8 py-4 rounded-full font-medium flex items-center justify-center gap-2 transition-all"
+                  className="group px-8 py-4 rounded-full font-medium flex items-center justify-center gap-2 transition-all cursor-pointer"
                   style={{
                     backgroundColor: '#B89650',
                     color: '#000000',

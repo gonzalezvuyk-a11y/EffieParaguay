@@ -164,7 +164,7 @@ export function ContactSection() {
 
                 <MagneticButton
                   type="submit"
-                  className="w-full px-8 py-4 rounded-2xl font-medium flex items-center justify-center gap-2 group transition-all"
+                  className="w-full px-8 py-4 rounded-2xl font-medium flex items-center justify-center gap-2 group transition-all cursor-pointer"
                   style={{
                     backgroundColor: '#B89650',
                     color: '#000000',

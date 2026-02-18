@@ -167,7 +167,7 @@ export function Footer() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 rounded-xl font-medium flex items-center gap-2"
+                  className="px-6 py-3 rounded-xl font-medium flex items-center gap-2 cursor-pointer"
                   style={{
                     backgroundColor: '#B89650',
                     color: '#000000',
