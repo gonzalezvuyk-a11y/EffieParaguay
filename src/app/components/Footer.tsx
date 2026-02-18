@@ -8,18 +8,18 @@ export function Footer() {
       { label: 'Qué es Effie', href: '#que-es' },
       { label: 'Categorías', href: '#categorias' },
       { label: 'Calendario', href: '#calendario' },
-      { label: 'Effie Index', href: '#' },
+      { label: 'Effie Index', href: 'https://www.effieindex.com/' },
     ],
     recursos: [
       { label: 'Bases y Condiciones', href: '#' },
       { label: 'Guía de Inscripción', href: '#' },
       { label: 'Contacto', href: '#contacto' },
-    ],
+    ],ef
   };
 
   const socialLinks = [
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+    { icon: Instagram, href: 'https://www.instagram.com/effie.py/', label: 'Instagram' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/effie-awards-paraguay', label: 'LinkedIn' },
   ];
 
   return (
