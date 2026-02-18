@@ -149,7 +149,7 @@ export function SponsorsSection() {
                 />
                 
                 <img 
-                  src={logoICON} 
+                  src={logoAPP} 
                   alt="ICON LAT - Auspiciante"
                   className="h-20 w-auto object-contain opacity-90 group-hover:opacity-100 transition-all duration-500 relative z-10"
                 />
@@ -190,7 +190,7 @@ export function SponsorsSection() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
             {[
               { logo: logoCerneco, name: 'Cerneco', alt: 'Cerneco', href: 'https://www.cerneco.org.py/', invert: false },
-              { logo: logoAPP, name: 'APAP', alt: 'APAP', href: 'https://www.apap.org.py/', invert: false },
+              { logo: logoICON, name: 'APAP', alt: 'APAP', href: 'https://www.apap.org.py/', invert: false },
               { logo: logoCAP, name: 'CAP', alt: 'Consejo Argentino de Publicidad', href: 'https://revistacap.com.py/', invert: true },
               { logo: logoEletrcub, name: 'El Círculo', alt: 'El Círculo', href: 'https://elcirculo.org.py/', invert: false },
               { logo: logoFAC, name: 'FIC', alt: 'Federación de Industrias Creativas', href: 'https://fic.org.py/', invert: true },
