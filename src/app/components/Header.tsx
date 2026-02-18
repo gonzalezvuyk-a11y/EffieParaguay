@@ -120,7 +120,7 @@ export function Header() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="ml-4 px-6 py-2 rounded-full font-medium transition-all"
+              className="ml-4 px-6 py-2 rounded-full font-medium transition-all cursor-pointer"
               style={{
                 backgroundColor: '#B89650',
                 color: '#000000',
@@ -177,7 +177,7 @@ export function Header() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navItems.length * 0.1 }}
-                className="w-full px-6 py-2 rounded-full font-medium"
+                className="w-full px-6 py-2 rounded-full font-medium cursor-pointer"
                 style={{
                   backgroundColor: '#B89650',
                   color: '#000000',
