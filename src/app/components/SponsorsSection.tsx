@@ -6,6 +6,7 @@ import logoCAP from '../../assets/afbae2e05d7d5a9d4ce1542fd1d7cc0f7920b429.png';
 import logoFAC from '../../assets/579f03a2d91524519d73697d5d47e5960f44bdbc.png';
 import logoEletrcub from '../../assets/94c36a98462ef404415ed858ab26a2905e7eb883.png';
 import logoICON from '../../assets/62e24a5913cfd512c8c297f256a814697e9a3045.png';
+import logoCerneco from '../../assets/cerneco.png';
 import { DotsPattern } from './DotsPattern';
 
 export function SponsorsSection() {
@@ -189,6 +190,7 @@ export function SponsorsSection() {
               { logo: logoCAP, name: 'CAP', alt: 'Consejo Argentino de Publicidad', invert: true },
               { logo: logoFAC, name: 'FAC', alt: 'Federación de Industrias Creativas', invert: true },
               { logo: logoEletrcub, name: 'El Círculo', alt: 'El Círculo', invert: false },
+              { logo: logoCerneco, name: 'Cerneco', alt: 'Cerneco', invert: false },
             ].map((alliance, index) => (
               <motion.div
                 key={index}
