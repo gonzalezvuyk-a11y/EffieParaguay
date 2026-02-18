@@ -11,12 +11,12 @@ export function Footer() {
       { label: 'Effie Index', href: 'https://www.effieindex.com/' },
     ],
     recursos: [
-      { label: 'Bases y Condiciones', href: '#' },
-      { label: 'Guía de Inscripción', href: '#' },
+      { label: 'Bases y Condiciones', href: 'https://drive.google.com/file/d/14NKE5mVLCJ_r_hEvcYo2kLAkYuSwh2N1/view?usp=drive_link' },
+      { label: 'Guía de Inscripción', href: 'https://drive.google.com/file/d/1qHaExVouoK9dQjzaOZTgETZzBcb5jXZt/view?usp=drive_link' },
       { label: 'Contacto', href: '#contacto' },
     ],
   };
-
+  const isExternal = (url: string) => /^https?:\/\//.test(url);
   const socialLinks = [
     { icon: Instagram, href: 'https://www.instagram.com/effie.py/', label: 'Instagram' },
     { icon: Linkedin, href: 'https://www.linkedin.com/company/effie-awards-paraguay', label: 'LinkedIn' },
@@ -104,21 +104,23 @@ export function Footer() {
                         viewport={{ once: true }}
                         transition={{ delay: linkIndex * 0.05 }}
                       >
-                        <a
-                          href={link.href}
-                          className="text-sm inline-block transition-all duration-300"
-                          style={{ color: '#999' }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.color = '#B89650';
-                            e.currentTarget.style.transform = 'translateX(4px)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.color = '#999';
-                            e.currentTarget.style.transform = 'translateX(0)';
-                          }}
-                        >
-                          {link.label}
-                        </a>
+                       <a
+                         href={link.href}
+                         target={isExternal(link.href) ? "_blank" : undefined}
+                         rel={isExternal(link.href) ? "noopener noreferrer" : undefined}
+                         className="text-sm inline-block transition-all duration-300"
+                         style={{ color: '#999' }}
+                         onMouseEnter={(e) => {
+                           e.currentTarget.style.color = '#B89650';
+                           e.currentTarget.style.transform = 'translateX(4px)';
+                         }}
+                         onMouseLeave={(e) => {
+                           e.currentTarget.style.color = '#999';
+                           e.currentTarget.style.transform = 'translateX(0)';
+                         }}
+                         >
+                         {link.label}
+                       </a>
                       </motion.li>
                     ))}
                   </ul>
