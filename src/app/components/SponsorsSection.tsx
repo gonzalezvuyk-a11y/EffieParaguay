@@ -191,8 +191,8 @@ export function SponsorsSection() {
             {[
               { logo: logoCerneco, name: 'Cerneco', alt: 'Cerneco', href: 'https://www.cerneco.org.py/', invert: false },
               { logo: logoICON, name: 'APAP', alt: 'APAP', href: 'https://www.apap.org.py/', invert: false },
-              { logo: logoCAP, name: 'CAP', alt: 'Consejo Argentino de Publicidad', href: 'https://revistacap.com.py/', invert: true },
-              { logo: logoEletrcub, name: 'El Círculo', alt: 'El Círculo', href: 'https://elcirculo.org.py/', invert: false },
+              { logo: logoEletrcub, name: 'CAP', alt: 'Consejo Argentino de Publicidad', href: 'https://revistacap.com.py/', invert: false },
+              { logo: logoCAP, name: 'El Círculo', alt: 'El Círculo', href: 'https://elcirculo.org.py/', invert: true },
               { logo: logoFAC, name: 'FIC', alt: 'Federación de Industrias Creativas', href: 'https://fic.org.py/', invert: true },
             ].map((alliance, index) => (
               <motion.a
