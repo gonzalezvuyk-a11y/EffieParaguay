@@ -181,7 +181,7 @@ export function CategoriesSection() {
                 e.currentTarget.style.backgroundColor = '#B89650';
                 e.currentTarget.style.color = '#000000';
               }}
-              >
+            >
               Ver Bases y Condiciones
             </motion.a>
 
@@ -205,10 +205,12 @@ export function CategoriesSection() {
                 e.currentTarget.style.backgroundColor = '#B89650';
                 e.currentTarget.style.color = '#000000';
               }}
-              >
+            >
               Ver Guía de Inscripción
             </motion.a>
           </div>
+        </motion.div>
+      </div>
     </section>
   );
 }
