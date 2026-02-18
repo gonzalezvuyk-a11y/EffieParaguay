@@ -160,28 +160,55 @@ export function CategoriesSection() {
           <p className="mb-6" style={{ color: '#666666' }}>
             Cada categoría evalúa la eficacia basada en objetivos claros, estrategia sólida y resultados comprobados
           </p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 rounded-full font-medium border transition-all"
-            style={{
-              backgroundColor: '#B89650',
-              color: '#000000',
-              borderColor: '#B89650',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#000000';
-              e.currentTarget.style.color = '#B89650';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#B89650';
-              e.currentTarget.style.color = '#000000';
-            }}
-          >
-            Ver Bases y Condiciones
-          </motion.button>
-        </motion.div>
-      </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <motion.a
+              href="https://drive.google.com/file/d/14NKE5mVLCJ_r_hEvcYo2kLAkYuSwh2N1/view?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 rounded-full font-medium border transition-all"
+              style={{
+                backgroundColor: '#B89650',
+                color: '#000000',
+                borderColor: '#B89650',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#000000';
+                e.currentTarget.style.color = '#B89650';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#B89650';
+                e.currentTarget.style.color = '#000000';
+              }}
+              >
+              Ver Bases y Condiciones
+            </motion.a>
+
+            <motion.a
+              href="https://drive.google.com/file/d/1qHaExVouoK9dQjzaOZTgETZzBcb5jXZt/view?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 rounded-full font-medium border transition-all"
+              style={{
+                backgroundColor: '#B89650',
+                color: '#000000',
+                borderColor: '#B89650',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#000000';
+                e.currentTarget.style.color = '#B89650';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#B89650';
+                e.currentTarget.style.color = '#000000';
+              }}
+              >
+              Ver Guía de Inscripción
+            </motion.a>
+          </div>
     </section>
   );
 }
