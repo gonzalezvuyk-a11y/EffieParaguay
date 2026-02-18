@@ -111,7 +111,10 @@ export function SponsorsSection() {
 
           {/* Sponsors Grid */}
           <div className="flex justify-center items-center">
-            <motion.div
+            <motion.a
+              href="https://iconlat.com"
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -146,14 +149,14 @@ export function SponsorsSection() {
                 />
                 
                 <img 
-                  src={logoAPP} 
-                  alt="AAP - Auspiciante Principal"
+                  src={logoICON} 
+                  alt="ICON LAT - Auspiciante"
                   className="h-20 w-auto object-contain opacity-90 group-hover:opacity-100 transition-all duration-500 relative z-10"
                 />
               </motion.div>
 
               {/* Decorative Badge - REMOVED */}
-            </motion.div>
+            </motion.a>
           </div>
         </motion.div>
 
@@ -186,19 +189,22 @@ export function SponsorsSection() {
           {/* Alliances Grid */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
             {[
-              { logo: logoICON, name: 'ICON', alt: 'ICON', invert: false },
-              { logo: logoCAP, name: 'CAP', alt: 'Consejo Argentino de Publicidad', invert: true },
-              { logo: logoFAC, name: 'FAC', alt: 'Federación de Industrias Creativas', invert: true },
-              { logo: logoEletrcub, name: 'El Círculo', alt: 'El Círculo', invert: false },
-              { logo: logoCerneco, name: 'Cerneco', alt: 'Cerneco', invert: false },
+              { logo: logoCerneco, name: 'Cerneco', alt: 'Cerneco', href: 'https://www.cerneco.org.py/', invert: false },
+              { logo: logoAPP, name: 'APAP', alt: 'APAP', href: 'https://www.apap.org.py/', invert: false },
+              { logo: logoCAP, name: 'CAP', alt: 'Consejo Argentino de Publicidad', href: 'https://revistacap.com.py/', invert: true },
+              { logo: logoEletrcub, name: 'El Círculo', alt: 'El Círculo', href: 'https://elcirculo.org.py/', invert: false },
+              { logo: logoFAC, name: 'FIC', alt: 'Federación de Industrias Creativas', href: 'https://fic.org.py/', invert: true },
             ].map((alliance, index) => (
-              <motion.div
+              <motion.a
                 key={index}
+                href={alliance.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="group"
+                className="group block"
               >
                 {/* Premium Card */}
                 <motion.div
@@ -239,7 +245,7 @@ export function SponsorsSection() {
                     }`}
                   />
                 </motion.div>
-              </motion.div>
+              </motion.a>
             ))}
           </div>
         </motion.div>
