@@ -184,7 +184,7 @@ export function SponsorsSection() {
           </div>
 
           {/* Alliances Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
             {[
               { logo: logoICON, name: 'ICON', alt: 'ICON', invert: false },
               { logo: logoCAP, name: 'CAP', alt: 'Consejo Argentino de Publicidad', invert: true },
