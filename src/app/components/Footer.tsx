@@ -1,8 +1,14 @@
 import { motion } from 'motion/react';
 import { Instagram, Linkedin, Mail } from 'lucide-react';
+import { useForm, ValidationError } from '@formspree/react';
 import effieLogo from '../../assets/50ca5ee8af00d3d0e3dfb019f7124297732c358e.png';
 
 export function Footer() {
+  const [newsletterState, handleNewsletterSubmit] = useForm('mjgeebbz');
+  const hasNewsletterGlobalError = Boolean(
+    newsletterState.errors?.some((error) => !error.field || error.field === 'form')
+  );
+
   const footerLinks = {
     'Effie Awards': [
       { label: 'Qué es Effie', href: '#que-es' },
@@ -147,36 +153,61 @@ export function Footer() {
                   Recibe noticias, fechas importantes y recursos sobre Effie Awards Paraguay
                 </p>
               </div>
-              <div className="flex gap-3 w-full md:w-auto">
-                <input
-                  type="email"
-                  placeholder="tu@email.com"
-                  className="flex-1 md:w-64 px-6 py-3 backdrop-blur-sm border rounded-xl focus:outline-none transition-all"
-                  style={{
-                    backgroundColor: '#111111',
-                    borderColor: '#333333',
-                    color: '#FFFFFF',
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = '#B89650';
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = '#333333';
-                  }}
+              <form className="w-full md:w-auto" onSubmit={handleNewsletterSubmit}>
+                <div className="flex gap-3 w-full md:w-auto">
+                  <input
+                    id="newsletter-email"
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="tu@email.com"
+                    className="flex-1 md:w-64 px-6 py-3 backdrop-blur-sm border rounded-xl focus:outline-none transition-all"
+                    style={{
+                      backgroundColor: '#111111',
+                      borderColor: '#333333',
+                      color: '#FFFFFF',
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.borderColor = '#B89650';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.borderColor = '#333333';
+                    }}
+                  />
+                  <motion.button
+                    type="submit"
+                    disabled={newsletterState.submitting}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-6 py-3 rounded-xl font-medium flex items-center gap-2 cursor-pointer"
+                    style={{
+                      backgroundColor: '#B89650',
+                      color: '#000000',
+                    }}
+                  >
+                    <Mail className="w-5 h-5" />
+                    <span className="hidden sm:inline">
+                      {newsletterState.submitting ? 'Enviando...' : 'Suscribirse'}
+                    </span>
+                  </motion.button>
+                </div>
+                <ValidationError
+                  prefix="Email"
+                  field="email"
+                  errors={newsletterState.errors}
+                  className="text-xs mt-2"
                 />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 rounded-xl font-medium flex items-center gap-2 cursor-pointer"
-                  style={{
-                    backgroundColor: '#B89650',
-                    color: '#000000',
-                  }}
-                >
-                  <Mail className="w-5 h-5" />
-                  <span className="hidden sm:inline">Suscribirse</span>
-                </motion.button>
-              </div>
+                {newsletterState.succeeded && (
+                  <p className="text-xs mt-2" style={{ color: '#9ccc65' }}>
+                    ¡Gracias por suscribirte!
+                  </p>
+                )}
+                {hasNewsletterGlobalError && !newsletterState.succeeded && (
+                  <p className="text-xs mt-2" style={{ color: '#ef9a9a' }}>
+                    No se pudo completar la suscripción. Intenta nuevamente.
+                  </p>
+                )}
+              </form>
             </div>
           </motion.div>
 
