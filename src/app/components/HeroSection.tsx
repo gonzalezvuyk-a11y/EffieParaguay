@@ -149,8 +149,9 @@ export function HeroSection() {
     offset: ['start start', 'end start'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const trophyY = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7, 1], [1, 1, 0.2]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
   const interactionWidthRatio = 0.6;
   const interactionHeightRatio = 0.56;
@@ -345,7 +346,7 @@ export function HeroSection() {
       <div className="absolute inset-0">
         {/* Radial gradients with parallax */}
         <motion.div
-          style={{ scale, opacity: 0.6 }}
+          style={{ scale, y: backgroundY, opacity: 0.6 }}
           className="absolute inset-0"
         >
           <div
@@ -385,7 +386,7 @@ export function HeroSection() {
       </div>
 
       <motion.div
-        style={{ y, opacity }}
+        style={{ opacity }}
         className="container mx-auto px-6 py-20 md:py-32 relative z-10"
       >
         <div className="max-w-7xl mx-auto">
@@ -395,6 +396,7 @@ export function HeroSection() {
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
+              style={{ y: trophyY }}
               className="relative flex justify-center"
             >
               <motion.div
