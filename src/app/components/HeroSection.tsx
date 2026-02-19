@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'motion/react';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import effieGif from '../../assets/0a75d0ddf2653507a1ac14e86fc1c8bd276cf698.png';
@@ -14,8 +14,132 @@ interface TimeLeft {
   seconds: number;
 }
 
+interface InteractiveTrophyGifProps {
+  src: string;
+  alt: string;
+  className?: string;
+  playbackTargetRef: React.MutableRefObject<number>;
+}
+
+function InteractiveTrophyGif({ src, alt, className, playbackTargetRef }: InteractiveTrophyGifProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [useFallbackImage, setUseFallbackImage] = useState(false);
+
+  useEffect(() => {
+    let animationFrame = 0;
+    let isDisposed = false;
+    const decodedFrames: VideoFrame[] = [];
+    const frameDurations: number[] = [];
+
+    const cleanupFrames = () => {
+      decodedFrames.forEach((frame) => frame.close());
+    };
+
+    const initialize = async () => {
+      if (typeof window === 'undefined' || !('ImageDecoder' in window)) {
+        setUseFallbackImage(true);
+        return;
+      }
+
+      try {
+        const response = await fetch(src);
+        const data = await response.arrayBuffer();
+        const decoder = new ImageDecoder({ data, type: 'image/gif' });
+
+        await decoder.tracks.ready;
+        const totalFrames = decoder.tracks.selectedTrack?.frameCount ?? 0;
+
+        if (!totalFrames) {
+          setUseFallbackImage(true);
+          return;
+        }
+
+        for (let frameIndex = 0; frameIndex < totalFrames; frameIndex++) {
+          const { image } = await decoder.decode({ frameIndex });
+          decodedFrames.push(image);
+          frameDurations.push(Math.max(16, (image.duration ?? 100000) / 1000));
+        }
+
+        if (isDisposed) {
+          cleanupFrames();
+          return;
+        }
+
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const firstFrame = decodedFrames[0];
+        canvas.width = firstFrame.displayWidth;
+        canvas.height = firstFrame.displayHeight;
+
+        const context = canvas.getContext('2d');
+        if (!context) {
+          setUseFallbackImage(true);
+          cleanupFrames();
+          return;
+        }
+
+        let currentFrame = 0;
+        let frameAccumulator = 0;
+        let lastTime = performance.now();
+        let playbackRate = 1;
+
+        const render = (currentTime: number) => {
+          if (isDisposed) return;
+
+          const deltaMs = currentTime - lastTime;
+          lastTime = currentTime;
+
+          const targetRate = playbackTargetRef.current;
+          const easing = targetRate < playbackRate ? 0.2 : 0.1;
+          playbackRate += (targetRate - playbackRate) * easing;
+          frameAccumulator += deltaMs * playbackRate;
+
+          while (frameAccumulator >= frameDurations[currentFrame]) {
+            frameAccumulator -= frameDurations[currentFrame];
+            currentFrame = (currentFrame + 1) % decodedFrames.length;
+          }
+
+          while (frameAccumulator <= -frameDurations[(currentFrame - 1 + decodedFrames.length) % decodedFrames.length]) {
+            currentFrame = (currentFrame - 1 + decodedFrames.length) % decodedFrames.length;
+            frameAccumulator += frameDurations[currentFrame];
+          }
+
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(decodedFrames[currentFrame], 0, 0, canvas.width, canvas.height);
+
+          animationFrame = requestAnimationFrame(render);
+        };
+
+        animationFrame = requestAnimationFrame(render);
+      } catch {
+        setUseFallbackImage(true);
+        cleanupFrames();
+      }
+    };
+
+    initialize();
+
+    return () => {
+      isDisposed = true;
+      cancelAnimationFrame(animationFrame);
+      cleanupFrames();
+    };
+  }, [src, playbackTargetRef]);
+
+  if (useFallbackImage) {
+    return <img src={src} alt={alt} className={className} />;
+  }
+
+  return <canvas ref={canvasRef} className={className} aria-label={alt} role="img" />;
+}
+
 export function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
+  const trophyRef = useRef<HTMLDivElement>(null);
+  const playbackTargetRef = useRef(1);
+  const playbackGlideTimeoutRef = useRef<number | null>(null);
+  const playbackResetTimeoutRef = useRef<number | null>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start start', 'end start'],
@@ -24,6 +148,16 @@ export function HeroSection() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  const hoverRotate = useMotionValue(0);
+  const smoothHoverRotate = useSpring(hoverRotate, {
+    stiffness: 220,
+    damping: 20,
+    mass: 0.45,
+  });
+  const hoverDepthX = useTransform(smoothHoverRotate, [-14, 0, 12], [-68, 0, 28]);
+  const hoverDepthScale = useTransform(smoothHoverRotate, [-14, 0, 12], [0.8, 1, 1.05]);
+  const hoverDepthBrightness = useTransform(smoothHoverRotate, [-14, 0, 12], [0.8, 1, 1.04]);
+  const hoverDepthFilter = useTransform(hoverDepthBrightness, (brightness) => `brightness(${brightness})`);
 
   // Countdown state
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
@@ -65,6 +199,69 @@ export function HeroSection() {
       duration: 3 + Math.random() * 2,
       delay: Math.random() * 2,
     }));
+  }, []);
+
+  const handleTrophyMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!trophyRef.current) return;
+
+    const rect = trophyRef.current.getBoundingClientRect();
+    const cursorX = event.clientX - rect.left;
+    const normalizedX = (cursorX / rect.width) * 2 - 1;
+    const tilt = Math.max(-14, Math.min(12, normalizedX * 12.5));
+
+    hoverRotate.set(tilt);
+
+    if (event.movementX >= 0) {
+      playbackTargetRef.current = Math.min(5, 1 + event.movementX / 2.8);
+    } else {
+      playbackTargetRef.current = Math.max(-6, 1 + event.movementX / 1.3);
+    }
+
+    if (playbackGlideTimeoutRef.current) {
+      window.clearTimeout(playbackGlideTimeoutRef.current);
+    }
+
+    if (playbackResetTimeoutRef.current) {
+      window.clearTimeout(playbackResetTimeoutRef.current);
+    }
+
+    const glidingTarget = event.movementX < 0 ? -2.2 : 1.9;
+
+    playbackGlideTimeoutRef.current = window.setTimeout(() => {
+      playbackTargetRef.current = glidingTarget;
+    }, 120);
+
+    playbackResetTimeoutRef.current = window.setTimeout(() => {
+      playbackTargetRef.current = 1;
+    }, 760);
+  };
+
+  const handleTrophyMouseLeave = () => {
+    hoverRotate.set(0);
+
+    if (playbackGlideTimeoutRef.current) {
+      window.clearTimeout(playbackGlideTimeoutRef.current);
+      playbackGlideTimeoutRef.current = null;
+    }
+
+    if (playbackResetTimeoutRef.current) {
+      window.clearTimeout(playbackResetTimeoutRef.current);
+      playbackResetTimeoutRef.current = null;
+    }
+
+    playbackTargetRef.current = 1;
+  };
+
+  useEffect(() => {
+    return () => {
+      if (playbackGlideTimeoutRef.current) {
+        window.clearTimeout(playbackGlideTimeoutRef.current);
+      }
+
+      if (playbackResetTimeoutRef.current) {
+        window.clearTimeout(playbackResetTimeoutRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -131,27 +328,36 @@ export function HeroSection() {
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.8 }}
-              className="relative"
+              className="relative flex justify-center"
             >
-              <div className="relative">
-                {/* Image */}
-                <motion.img
-                  src={effieGif}
-                  alt="Effie Award Trophy"
-                  className="relative w-full h-auto max-w-md mx-auto"
-                  style={{
-                    transform: 'scale(1.56) translateY(-25%)',
-                  }}
+              <motion.div
+                ref={trophyRef}
+                className="relative w-full max-w-xl lg:max-w-2xl"
+                style={{ rotate: smoothHoverRotate }}
+                onMouseMove={handleTrophyMouseMove}
+                onMouseLeave={handleTrophyMouseLeave}
+                transition={{ type: 'spring', stiffness: 220, damping: 18 }}
+              >
+                <motion.div
+                  className="relative w-full h-auto max-w-lg md:max-w-xl lg:max-w-2xl mx-auto"
+                  style={{ x: hoverDepthX, scale: hoverDepthScale, filter: hoverDepthFilter }}
                   animate={{
-                    y: [0, -20, 0],
+                    y: [0, -14, 0],
                   }}
                   transition={{
-                    duration: 4,
+                    duration: 5,
                     repeat: Infinity,
                     ease: "easeInOut",
                   }}
-                />
-              </div>
+                >
+                  <InteractiveTrophyGif
+                    src={effieGif}
+                    alt="Effie Award Trophy"
+                    className="w-full h-auto"
+                    playbackTargetRef={playbackTargetRef}
+                  />
+                </motion.div>
+              </motion.div>
             </motion.div>
 
             {/* Right side - Text Content */}

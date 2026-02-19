@@ -27,7 +27,7 @@ export function Header() {
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(sectionId);
             // Detect light sections
-            setIsLightSection(['que-es', 'calendario', 'contacto'].includes(sectionId));
+            setIsLightSection(['calendario', 'contacto'].includes(sectionId));
             break;
           }
         }
@@ -60,33 +60,50 @@ export function Header() {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        scrolled
-          ? 'backdrop-blur-xl'
-          : 'bg-transparent'
-      }`}
-      style={{
-        backgroundColor: scrolled 
-          ? (isLightSection ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)') 
-          : 'transparent',
-        boxShadow: scrolled ? '0 8px 32px rgba(144, 112, 48, 0.1)' : 'none',
-        borderBottom: scrolled 
-          ? (isLightSection ? '1px solid #e0e0e0' : '1px solid #333333') 
-          : 'none',
-      }}
+      className="fixed top-0 w-full z-50 transition-all duration-500"
     >
-      <nav className="container mx-auto px-6 py-4">
+      <nav
+        className={`transition-all duration-500 ${
+          scrolled
+            ? 'mx-3 mt-3 rounded-2xl px-6 py-3.5 md:mx-6 md:px-8 lg:mx-auto lg:max-w-7xl backdrop-blur-xl'
+            : 'container mx-auto px-6 py-4'
+        }`}
+        style={{
+          backgroundColor: scrolled
+            ? (isLightSection ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)')
+            : 'transparent',
+          boxShadow: scrolled ? '0 8px 32px rgba(144, 112, 48, 0.1)' : 'none',
+          border: scrolled
+            ? (isLightSection ? '1px solid #e0e0e0' : '1px solid #333333')
+            : '1px solid transparent',
+        }}
+      >
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="flex items-center gap-3 cursor-pointer"
           >
-            <img src={isLightSection ? effieLogoLight : effieLogo} alt="Effie Awards" className="h-12 w-auto" />
+            <div className="grid">
+              <motion.img
+                src={effieLogo}
+                alt="Effie Awards"
+                className="col-start-1 row-start-1 h-12 w-auto"
+                animate={{ opacity: isLightSection ? 0 : 1 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              />
+              <motion.img
+                src={effieLogoLight}
+                alt="Effie Awards"
+                className="col-start-1 row-start-1 h-12 w-auto"
+                animate={{ opacity: isLightSection ? 1 : 0 }}
+                transition={{ duration: 0.35, ease: 'easeInOut' }}
+              />
+            </div>
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-2">
             {navItems.map((item, index) => {
               const active = isActive(item.href);
               const textColor = scrolled && isLightSection 
@@ -101,7 +118,7 @@ export function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className="relative px-4 py-2 text-sm tracking-wide group"
+                  className="relative px-4 py-2 text-sm tracking-wide whitespace-nowrap group"
                   style={{ color: textColor }}
                 >
                   <span className="relative z-10">{item.label}</span>
