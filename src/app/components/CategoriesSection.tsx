@@ -155,12 +155,36 @@ export function CategoriesSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-16"
+          className="text-center mt-10"
         >
-          <p className="mb-6" style={{ color: '#666666' }}>
+          <motion.a
+            href="https://drive.google.com/file/d/1sOzaqTv2LtnNC3IVGbmf7LH0rNAU5CJm/view?usp=drive_link"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex px-5 py-2.5 rounded-full text-sm font-medium border transition-all"
+            style={{
+              backgroundColor: 'transparent',
+              color: '#907030',
+              borderColor: '#B89650',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(184, 150, 80, 0.08)';
+              e.currentTarget.style.color = '#907030';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '#907030';
+            }}
+          >
+            Ver todas las categorías
+          </motion.a>
+
+          <p className="mt-12 mb-6" style={{ color: '#666666' }}>
             Cada categoría evalúa la eficacia basada en objetivos claros, estrategia sólida y resultados comprobados
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 max-w-3xl mx-auto">
             <motion.a
               href="https://drive.google.com/file/d/14NKE5mVLCJ_r_hEvcYo2kLAkYuSwh2N1/view?usp=drive_link"
               target="_blank"
