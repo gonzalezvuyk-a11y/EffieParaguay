@@ -1,9 +1,15 @@
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
 import { MagneticButton } from './MagneticButton';
+import { useForm, ValidationError } from '@formspree/react';
 import effieTrophy from '../../assets/a72f01c1234fbb88ac0ace85c060207720389b87.png';
 
 export function ContactSection() {
+  const [state, handleSubmit] = useForm('xdaldqjq');
+  const hasGlobalError = Boolean(
+    state.errors?.some((error) => !error.field || error.field === 'form')
+  );
+
   return (
     <section 
       id="contacto" 
@@ -76,11 +82,14 @@ export function ContactSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <form className="space-y-5">
+              <form className="space-y-5" onSubmit={handleSubmit}>
                 <motion.div whileFocus={{ scale: 1.02 }}>
                   <input
+                    id="name"
+                    name="name"
                     type="text"
                     placeholder="Nombre Completo"
+                    required
                     className="w-full px-6 py-4 border rounded-2xl focus:outline-none transition-all"
                     style={{
                       backgroundColor: '#fafafa',
@@ -101,8 +110,11 @@ export function ContactSection() {
                 <div className="grid grid-cols-2 gap-4">
                   <motion.div whileFocus={{ scale: 1.02 }}>
                     <input
+                      id="email"
+                      name="email"
                       type="email"
                       placeholder="E-mail"
+                      required
                       className="w-full px-6 py-4 border rounded-2xl focus:outline-none transition-all"
                       style={{
                         backgroundColor: '#fafafa',
@@ -118,9 +130,17 @@ export function ContactSection() {
                         e.currentTarget.style.backgroundColor = '#fafafa';
                       }}
                     />
+                    <ValidationError
+                      prefix="Email"
+                      field="email"
+                      errors={state.errors}
+                      className="text-sm mt-2"
+                    />
                   </motion.div>
                   <motion.div whileFocus={{ scale: 1.02 }}>
                     <input
+                      id="phone"
+                      name="phone"
                       type="text"
                       placeholder="Teléfono"
                       className="w-full px-6 py-4 border rounded-2xl focus:outline-none transition-all"
@@ -143,8 +163,11 @@ export function ContactSection() {
 
                 <motion.div whileFocus={{ scale: 1.02 }}>
                   <textarea
+                    id="message"
+                    name="message"
                     placeholder="Mensaje"
                     rows={6}
+                    required
                     className="w-full px-6 py-4 border rounded-2xl focus:outline-none transition-all resize-none"
                     style={{
                       backgroundColor: '#fafafa',
@@ -160,17 +183,36 @@ export function ContactSection() {
                       e.currentTarget.style.backgroundColor = '#fafafa';
                     }}
                   ></textarea>
+                  <ValidationError
+                    prefix="Mensaje"
+                    field="message"
+                    errors={state.errors}
+                    className="text-sm mt-2"
+                  />
                 </motion.div>
+
+                {state.succeeded && (
+                  <p className="text-sm" style={{ color: '#2e7d32' }}>
+                    ¡Mensaje enviado! Te responderemos pronto.
+                  </p>
+                )}
+
+                {hasGlobalError && !state.succeeded && (
+                  <p className="text-sm" style={{ color: '#d32f2f' }}>
+                    No se pudo enviar el mensaje. Intenta nuevamente en unos minutos.
+                  </p>
+                )}
 
                 <MagneticButton
                   type="submit"
+                  disabled={state.submitting}
                   className="w-full px-8 py-4 rounded-2xl font-medium flex items-center justify-center gap-2 group transition-all cursor-pointer"
                   style={{
                     backgroundColor: '#B89650',
                     color: '#000000',
                   }}
                 >
-                  <span>Enviar Mensaje</span>
+                  <span>{state.submitting ? 'Enviando...' : 'Enviar Mensaje'}</span>
                   <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </MagneticButton>
               </form>
