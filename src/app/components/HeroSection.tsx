@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import effieGif from '../../assets/0a75d0ddf2653507a1ac14e86fc1c8bd276cf698.png';
@@ -91,7 +91,8 @@ function InteractiveTrophyGif({ src, alt, className, playbackTargetRef }: Intera
           lastTime = currentTime;
 
           const targetRate = playbackTargetRef.current;
-          const easing = targetRate < playbackRate ? 0.2 : 0.1;
+          const isReturningToNeutral = Math.abs(targetRate - 1) < 0.001;
+          const easing = isReturningToNeutral ? 0.075 : 0.12;
           playbackRate += (targetRate - playbackRate) * easing;
           frameAccumulator += deltaMs * playbackRate;
 
@@ -139,7 +140,9 @@ export function HeroSection() {
   const trophyRef = useRef<HTMLDivElement>(null);
   const playbackTargetRef = useRef(1);
   const playbackGlideTimeoutRef = useRef<number | null>(null);
+  const playbackSettleTimeoutRef = useRef<number | null>(null);
   const playbackResetTimeoutRef = useRef<number | null>(null);
+  const lastDirectionRef = useRef<1 | -1>(1);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start start', 'end start'],
@@ -148,16 +151,8 @@ export function HeroSection() {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
-  const hoverRotate = useMotionValue(0);
-  const smoothHoverRotate = useSpring(hoverRotate, {
-    stiffness: 220,
-    damping: 20,
-    mass: 0.45,
-  });
-  const hoverDepthX = useTransform(smoothHoverRotate, [-14, 0, 12], [-68, 0, 28]);
-  const hoverDepthScale = useTransform(smoothHoverRotate, [-14, 0, 12], [0.8, 1, 1.05]);
-  const hoverDepthBrightness = useTransform(smoothHoverRotate, [-14, 0, 12], [0.8, 1, 1.04]);
-  const hoverDepthFilter = useTransform(hoverDepthBrightness, (brightness) => `brightness(${brightness})`);
+  const interactionWidthRatio = 0.6;
+  const interactionHeightRatio = 0.56;
 
   // Countdown state
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
@@ -205,16 +200,51 @@ export function HeroSection() {
     if (!trophyRef.current) return;
 
     const rect = trophyRef.current.getBoundingClientRect();
-    const cursorX = event.clientX - rect.left;
-    const normalizedX = (cursorX / rect.width) * 2 - 1;
-    const tilt = Math.max(-14, Math.min(12, normalizedX * 12.5));
+    const activeWidth = rect.width * interactionWidthRatio;
+    const activeHeight = rect.height * interactionHeightRatio;
+    const activeLeft = rect.left + (rect.width - activeWidth) / 2;
+    const activeTop = rect.top + (rect.height - activeHeight) / 2;
+    const activeRight = activeLeft + activeWidth;
+    const activeBottom = activeTop + activeHeight;
 
-    hoverRotate.set(tilt);
+    const isInsideActiveZone =
+      event.clientX >= activeLeft &&
+      event.clientX <= activeRight &&
+      event.clientY >= activeTop &&
+      event.clientY <= activeBottom;
 
-    if (event.movementX >= 0) {
-      playbackTargetRef.current = Math.min(5, 1 + event.movementX / 2.8);
+    if (!isInsideActiveZone) {
+      const exitDirection = lastDirectionRef.current;
+      playbackTargetRef.current = exitDirection < 0 ? -2.2 : 1.7;
+
+      if (playbackGlideTimeoutRef.current) {
+        window.clearTimeout(playbackGlideTimeoutRef.current);
+      }
+      if (playbackSettleTimeoutRef.current) {
+        window.clearTimeout(playbackSettleTimeoutRef.current);
+      }
+      if (playbackResetTimeoutRef.current) {
+        window.clearTimeout(playbackResetTimeoutRef.current);
+      }
+
+      playbackSettleTimeoutRef.current = window.setTimeout(() => {
+        playbackTargetRef.current = exitDirection < 0 ? -1.2 : 1.15;
+      }, 320);
+
+      playbackResetTimeoutRef.current = window.setTimeout(() => {
+        playbackTargetRef.current = 1;
+      }, 1100);
+      return;
+    }
+
+    if (Math.abs(event.movementX) < 0.35) {
+      playbackTargetRef.current = 1;
+    } else if (event.movementX > 0) {
+      lastDirectionRef.current = 1;
+      playbackTargetRef.current = Math.min(4.2, 1 + event.movementX / 3.6);
     } else {
-      playbackTargetRef.current = Math.max(-6, 1 + event.movementX / 1.3);
+      lastDirectionRef.current = -1;
+      playbackTargetRef.current = Math.max(-6.2, 1 + event.movementX / 1.2);
     }
 
     if (playbackGlideTimeoutRef.current) {
@@ -225,20 +255,23 @@ export function HeroSection() {
       window.clearTimeout(playbackResetTimeoutRef.current);
     }
 
-    const glidingTarget = event.movementX < 0 ? -2.2 : 1.9;
+    const glidingTarget = event.movementX < 0 ? -2.7 : 1.9;
+    const settleTarget = event.movementX < 0 ? -1.35 : 1.2;
 
     playbackGlideTimeoutRef.current = window.setTimeout(() => {
       playbackTargetRef.current = glidingTarget;
     }, 120);
 
+    playbackSettleTimeoutRef.current = window.setTimeout(() => {
+      playbackTargetRef.current = settleTarget;
+    }, 480);
+
     playbackResetTimeoutRef.current = window.setTimeout(() => {
       playbackTargetRef.current = 1;
-    }, 760);
+    }, 1200);
   };
 
   const handleTrophyMouseLeave = () => {
-    hoverRotate.set(0);
-
     if (playbackGlideTimeoutRef.current) {
       window.clearTimeout(playbackGlideTimeoutRef.current);
       playbackGlideTimeoutRef.current = null;
@@ -249,13 +282,31 @@ export function HeroSection() {
       playbackResetTimeoutRef.current = null;
     }
 
-    playbackTargetRef.current = 1;
+    if (playbackSettleTimeoutRef.current) {
+      window.clearTimeout(playbackSettleTimeoutRef.current);
+      playbackSettleTimeoutRef.current = null;
+    }
+
+    const leaveDirection = lastDirectionRef.current;
+    playbackTargetRef.current = leaveDirection < 0 ? -2 : 1.6;
+
+    playbackSettleTimeoutRef.current = window.setTimeout(() => {
+      playbackTargetRef.current = leaveDirection < 0 ? -1.15 : 1.1;
+    }, 340);
+
+    playbackResetTimeoutRef.current = window.setTimeout(() => {
+      playbackTargetRef.current = 1;
+    }, 1100);
   };
 
   useEffect(() => {
     return () => {
       if (playbackGlideTimeoutRef.current) {
         window.clearTimeout(playbackGlideTimeoutRef.current);
+      }
+
+      if (playbackSettleTimeoutRef.current) {
+        window.clearTimeout(playbackSettleTimeoutRef.current);
       }
 
       if (playbackResetTimeoutRef.current) {
@@ -333,14 +384,12 @@ export function HeroSection() {
               <motion.div
                 ref={trophyRef}
                 className="relative w-full max-w-xl lg:max-w-2xl"
-                style={{ rotate: smoothHoverRotate }}
                 onMouseMove={handleTrophyMouseMove}
                 onMouseLeave={handleTrophyMouseLeave}
                 transition={{ type: 'spring', stiffness: 220, damping: 18 }}
               >
                 <motion.div
                   className="relative w-full h-auto max-w-lg md:max-w-xl lg:max-w-2xl mx-auto"
-                  style={{ x: hoverDepthX, scale: hoverDepthScale, filter: hoverDepthFilter }}
                   animate={{
                     y: [0, -14, 0],
                   }}
