@@ -138,6 +138,7 @@ function InteractiveTrophyGif({ src, alt, className, playbackTargetRef }: Intera
 export function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
   const trophyRef = useRef<HTMLDivElement>(null);
+  const lastPointerXRef = useRef<number | null>(null);
   const playbackTargetRef = useRef(1);
   const playbackGlideTimeoutRef = useRef<number | null>(null);
   const playbackSettleTimeoutRef = useRef<number | null>(null);
@@ -196,8 +197,17 @@ export function HeroSection() {
     }));
   }, []);
 
-  const handleTrophyMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleTrophyPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!trophyRef.current) return;
+
+    const movementX =
+      event.movementX !== 0
+        ? event.movementX
+        : lastPointerXRef.current === null
+          ? 0
+          : event.clientX - lastPointerXRef.current;
+
+    lastPointerXRef.current = event.clientX;
 
     const rect = trophyRef.current.getBoundingClientRect();
     const activeWidth = rect.width * interactionWidthRatio;
@@ -237,14 +247,14 @@ export function HeroSection() {
       return;
     }
 
-    if (Math.abs(event.movementX) < 0.35) {
+    if (Math.abs(movementX) < 0.35) {
       playbackTargetRef.current = 1;
-    } else if (event.movementX > 0) {
+    } else if (movementX > 0) {
       lastDirectionRef.current = 1;
-      playbackTargetRef.current = Math.min(4.2, 1 + event.movementX / 3.6);
+      playbackTargetRef.current = Math.min(4.2, 1 + movementX / 3.6);
     } else {
       lastDirectionRef.current = -1;
-      playbackTargetRef.current = Math.max(-6.2, 1 + event.movementX / 1.2);
+      playbackTargetRef.current = Math.max(-6.2, 1 + movementX / 1.2);
     }
 
     if (playbackGlideTimeoutRef.current) {
@@ -255,8 +265,8 @@ export function HeroSection() {
       window.clearTimeout(playbackResetTimeoutRef.current);
     }
 
-    const glidingTarget = event.movementX < 0 ? -2.7 : 1.9;
-    const settleTarget = event.movementX < 0 ? -1.35 : 1.2;
+    const glidingTarget = movementX < 0 ? -2.7 : 1.9;
+    const settleTarget = movementX < 0 ? -1.35 : 1.2;
 
     playbackGlideTimeoutRef.current = window.setTimeout(() => {
       playbackTargetRef.current = glidingTarget;
@@ -271,7 +281,13 @@ export function HeroSection() {
     }, 1200);
   };
 
-  const handleTrophyMouseLeave = () => {
+  const handleTrophyPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    lastPointerXRef.current = event.clientX;
+  };
+
+  const handleTrophyPointerEnd = () => {
+    lastPointerXRef.current = null;
+
     if (playbackGlideTimeoutRef.current) {
       window.clearTimeout(playbackGlideTimeoutRef.current);
       playbackGlideTimeoutRef.current = null;
@@ -370,10 +386,10 @@ export function HeroSection() {
 
       <motion.div
         style={{ y, opacity }}
-        className="container mx-auto px-6 py-32 relative z-10"
+        className="container mx-auto px-6 py-20 md:py-32 relative z-10"
       >
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left side - GIF/Image */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -384,8 +400,11 @@ export function HeroSection() {
               <motion.div
                 ref={trophyRef}
                 className="relative w-full max-w-xl lg:max-w-2xl"
-                onMouseMove={handleTrophyMouseMove}
-                onMouseLeave={handleTrophyMouseLeave}
+                onPointerDown={handleTrophyPointerDown}
+                onPointerMove={handleTrophyPointerMove}
+                onPointerLeave={handleTrophyPointerEnd}
+                onPointerUp={handleTrophyPointerEnd}
+                onPointerCancel={handleTrophyPointerEnd}
                 transition={{ type: 'spring', stiffness: 220, damping: 18 }}
               >
                 <motion.div
@@ -410,7 +429,7 @@ export function HeroSection() {
             </motion.div>
 
             {/* Right side - Text Content */}
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
               {/* Floating badge */}
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
@@ -432,7 +451,7 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-5xl md:text-6xl lg:text-7xl leading-tight"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight"
                 style={{ color: '#FFFFFF', fontWeight: 450 }}
               >
                 Reconociendo
@@ -455,7 +474,7 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="text-lg md:text-xl"
+                className="text-base md:text-xl"
                 style={{ color: '#999999' }}
               >
                 Reconocemos las ideas de marketing más efectivas que demuestran resultados 
@@ -497,7 +516,7 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1 }}
-                className="pt-8 space-y-4"
+                className="pt-6 md:pt-8 space-y-4"
               >
                 <div className="text-center mb-4">
                   <p className="text-sm uppercase tracking-wider" style={{ color: '#999999' }}>
@@ -505,7 +524,7 @@ export function HeroSection() {
                   </p>
                 </div>
                 
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
                     { value: timeLeft.days, label: 'Días' },
                     { value: timeLeft.hours, label: 'Horas' },

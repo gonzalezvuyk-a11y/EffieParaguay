@@ -67,7 +67,7 @@ export function AboutSection() {
                 backgroundClip: 'text',
                 display: 'inline-block',
               }}
-            >Effie Awards</span>?
+            >Effie Awards?</span>
           </h2>
           <p className="text-xl leading-relaxed" style={{ color: '#4a4a4a' }}>
             Effie Awards es el único premio que reconoce la efectividad en marketing y comunicación. 
