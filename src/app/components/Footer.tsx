@@ -1,13 +1,9 @@
 import { motion } from 'motion/react';
 import { Instagram, Linkedin, Mail } from 'lucide-react';
-import { useForm, ValidationError } from '@formspree/react';
 import effieLogo from '../../assets/50ca5ee8af00d3d0e3dfb019f7124297732c358e.png';
 
 export function Footer() {
-  const [newsletterState, handleNewsletterSubmit] = useForm('mjgeebbz');
-  const hasNewsletterGlobalError = Boolean(
-    newsletterState.errors?.some((error) => !error.field || error.field === 'form')
-  );
+  const mailchimpActionUrl = 'https://iconlat.us6.list-manage.com/subscribe/post?u=dc044521c43efd0b6b6f8a402&id=9d17fb6bd9&f_id=003e0be3f0';
 
   const footerLinks = {
     'Effie Awards': [
@@ -153,11 +149,17 @@ export function Footer() {
                   Recibe noticias, fechas importantes y recursos sobre Effie Awards Paraguay
                 </p>
               </div>
-              <form className="w-full md:w-auto" onSubmit={handleNewsletterSubmit}>
+              <form
+                className="w-full md:w-auto"
+                action={mailchimpActionUrl}
+                method="post"
+                target="_blank"
+                noValidate
+              >
                 <div className="flex gap-3 w-full md:w-auto">
                   <input
                     id="newsletter-email"
-                    name="email"
+                    name="EMAIL"
                     type="email"
                     required
                     placeholder="tu@email.com"
@@ -176,7 +178,6 @@ export function Footer() {
                   />
                   <motion.button
                     type="submit"
-                    disabled={newsletterState.submitting}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-6 py-3 rounded-xl font-medium flex items-center gap-2 cursor-pointer"
@@ -186,27 +187,17 @@ export function Footer() {
                     }}
                   >
                     <Mail className="w-5 h-5" />
-                    <span className="hidden sm:inline">
-                      {newsletterState.submitting ? 'Enviando...' : 'Suscribirse'}
-                    </span>
+                    <span className="hidden sm:inline">Suscribirse</span>
                   </motion.button>
                 </div>
-                <ValidationError
-                  prefix="Email"
-                  field="email"
-                  errors={newsletterState.errors}
-                  className="text-xs mt-2"
-                />
-                {newsletterState.succeeded && (
-                  <p className="text-xs mt-2" style={{ color: '#9ccc65' }}>
-                    ¡Gracias por suscribirte!
-                  </p>
-                )}
-                {hasNewsletterGlobalError && !newsletterState.succeeded && (
-                  <p className="text-xs mt-2" style={{ color: '#ef9a9a' }}>
-                    No se pudo completar la suscripción. Intenta nuevamente.
-                  </p>
-                )}
+                <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
+                  <input
+                    type="text"
+                    name="b_dc044521c43efd0b6b6f8a402_9d17fb6bd9"
+                    tabIndex={-1}
+                    defaultValue=""
+                  />
+                </div>
               </form>
             </div>
           </motion.div>
