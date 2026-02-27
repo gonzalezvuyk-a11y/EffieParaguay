@@ -6,6 +6,7 @@ import { EffieLatamSection } from './components/EffieLatamSection';
 import { TimelineSection } from './components/TimelineSection';
 import { OrganizationSection } from './components/OrganizationSection';
 import { SponsorsSection } from './components/SponsorsSection';
+import { IconSponsorSection } from './components/IconSponsorSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { ScrollProgress } from './components/ScrollProgress';
@@ -108,6 +109,9 @@ export default function App() {
         <EffieLatamSection />
         <SectionDivider />
         <OrganizationSection />
+        <SectionDivider />
+        {/* Auspiciantes - ICON */}
+        <IconSponsorSection />
         <SectionDivider />
         <SponsorsSection />
         <SectionDivider />
