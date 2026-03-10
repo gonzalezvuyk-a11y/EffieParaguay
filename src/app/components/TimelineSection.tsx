@@ -45,7 +45,7 @@ export function TimelineSection() {
     },
     {
       title: 'Workshop 3: Criterios y Categorías',
-      date: '19 de marzo',
+      date: '26 de marzo',
       description: 'Inscribite aquí',
       url: 'https://koga-py.zoom.us/meeting/register/cyQWL6dmT0OUOMvgNP9sPg#/registration',
       align: 'right',
