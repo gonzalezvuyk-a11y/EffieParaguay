@@ -11,6 +11,7 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { ScrollProgress } from './components/ScrollProgress';
 import { SectionDivider } from './components/SectionDivider';
+import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -118,6 +119,7 @@ export default function App() {
         <ContactSection />
       </main>
       <Footer />
+      <WhatsAppFloatingButton />
       <Analytics />
     </div>
   );
