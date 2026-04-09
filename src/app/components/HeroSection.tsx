@@ -165,7 +165,7 @@ export function HeroSection() {
   });
 
   useEffect(() => {
-    const targetDate = new Date('2026-04-09T23:59:00').getTime();
+    const targetDate = new Date('2026-04-24T23:59:00').getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();

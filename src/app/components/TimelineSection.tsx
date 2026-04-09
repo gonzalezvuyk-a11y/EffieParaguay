@@ -45,14 +45,14 @@ export function TimelineSection() {
     },
     {
       title: 'Workshop 3: Criterios y Categorías',
-      date: '26 de marzo',
+      date: '19 de marzo',
       description: 'Inscribite aquí',
       url: 'https://koga-py.zoom.us/meeting/register/cyQWL6dmT0OUOMvgNP9sPg#/registration',
       align: 'right',
     },
     {
       title: '1° corte Early Birds',
-      date: '09 de abril',
+      date: '24 de abril',
       align: 'left',
     },
     {
@@ -64,27 +64,27 @@ export function TimelineSection() {
     },
     {
       title: '2° corte',
-      date: '19 de mayo',
+      date: '1 de junio',
       align: 'left',
     },
     {
       title: '3° Cierre de convocatoria',
-      date: '19 de junio',
+      date: '4 de julio',
       align: 'right',
     },
     {
       title: 'Jurado Primera Fase',
-      date: '21 de julio',
+      date: '4 de agosto',
       align: 'left',
     },
     {
       title: 'Jurado Segunda Fase',
-      date: '20 de agosto',
+      date: '3 de septiembre',
       align: 'right',
     },
     {
       title: 'Premiación',
-      date: '15 de octubre',
+      date: '29 de octubre',
       align: 'left',
       highlight: true,
     },
