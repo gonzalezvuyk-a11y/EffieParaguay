@@ -4,6 +4,7 @@ import { AboutSection } from './components/AboutSection';
 import { CategoriesSection } from './components/CategoriesSection';
 import { EffieLatamSection } from './components/EffieLatamSection';
 import { TimelineSection } from './components/TimelineSection';
+import { BenefitsSection } from './components/BenefitsSection';
 import { OrganizationSection } from './components/OrganizationSection';
 import { SponsorsSection } from './components/SponsorsSection';
 import { IconSponsorSection } from './components/IconSponsorSection';
@@ -104,6 +105,7 @@ export default function App() {
         <AboutSection />
         <SectionDivider />
         <TimelineSection />
+        <BenefitsSection />
         <SectionDivider />
         <CategoriesSection />
         <SectionDivider />
