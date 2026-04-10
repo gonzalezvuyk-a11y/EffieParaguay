@@ -123,7 +123,7 @@ export function BenefitsSection() {
                 display: 'inline-block',
               }}
             >Aprovechá</span>{' '}
-            nuestras ofertas
+            nuestros beneficios
           </h2>
           <p className="text-xl max-w-2xl mx-auto" style={{ color: '#a0a0a0' }}>
             Descuentos especiales y beneficios exclusivos para tu agencia
