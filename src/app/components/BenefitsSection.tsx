@@ -20,24 +20,25 @@ export function BenefitsSection() {
       title: 'Descuentos por volumen',
       icon: Zap,
       offers: [
-        { discount: '15%', condition: 'al inscribir 10 casos o más' },
-        { discount: '25%', condition: 'al inscribir 15 casos o más' },
+        { discount: '5%', condition: 'al inscribir 5 casos o más' },
+        { discount: '10%', condition: 'al inscribir 10 casos o más' },
+        { discount: '15%', condition: 'al inscribir 15 casos o más' },
       ],
-      conditions: 'Beneficio aplicable únicamente a inscripciones cerradas en la segunda fecha y hasta el cierre de convocatoria. No aplica en Early Birds.',
+      conditions: 'Estos descuentos no aplican durante la etapa Early Bird, y las inscripciones deberán estar completas y enviadas para que el descuento pueda aplicarse.',
       highlight: false,
     },
     {
-      title: 'Precompra especial de casos',
+      title: 'Paquete especial de preinscripción',
       icon: Gift,
-      description: 'Las agencias que proyecten inscribir 20 casos o más podrán acceder a una precompra en Early Birds, asegurando el valor de esta fase para esos casos, aun cuando su cierre en plataforma se realice hasta el cierre de convocatoria.',
+      description: 'Las agencias interesadas en inscribir 15 casos o más podrán acceder a un paquete especial de preinscripción durante la etapa Early Birds, con la posibilidad de enviar sus postulaciones hasta el cierre de la convocatoria, el 4 de julio de 2026, manteniendo el precio correspondiente a Early Birds.',
       highlight: true,
     },
   ];
 
   const importantPoints = [
-    'El pago debe realizarse dentro del período Early Birds',
-    'Los casos precomprados podrán cerrarse hasta la Fase 3',
-    'Los casos pagados y no utilizados no tienen devolución ni reembolso',
+    'Los descuentos aplican únicamente después de la etapa Early Birds',
+    'Las inscripciones deben estar completas para acceder al descuento',
+    'El paquete especial de preinscripción mantiene el precio de Early Birds hasta el 4 de julio',
   ];
 
   return (
@@ -220,7 +221,7 @@ export function BenefitsSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-3xl mx-auto mb-16"
+          className="max-w-5xl mx-auto mb-16"
         >
           <div 
             className="rounded-3xl p-8 border"
@@ -255,14 +256,16 @@ export function BenefitsSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center"
+          className="text-center px-6"
         >
           <motion.a
-            href="#"
-            aria-label="Ver bases y condiciones"
+            href="https://drive.google.com/file/d/14NKE5mVLCJ_r_hEvcYo2kLAkYuSwh2N1/view"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ver bases y condiciones (abre en nueva pestaña)"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="group inline-flex items-center gap-2 text-lg font-medium transition-all"
+            className="group inline-flex items-center justify-center gap-2 text-lg font-medium transition-all flex-wrap"
             style={{ color: '#B89650' }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = '#D4AF6A';
@@ -272,7 +275,7 @@ export function BenefitsSection() {
             }}
           >
             <span>Encontrá el detalle completo en nuestras Bases y Condiciones</span>
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform flex-shrink-0" />
           </motion.a>
         </motion.div>
       </div>
