@@ -84,7 +84,7 @@ export function TimelineSection() {
     },
     {
       title: 'Premiación',
-      date: '29 de octubre',
+      date: '15 de octubre',
       align: 'left',
       highlight: true,
     },
