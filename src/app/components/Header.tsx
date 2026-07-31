@@ -91,20 +91,20 @@ export function Header() {
           <motion.a
             href="/"
             whileHover={{ scale: 1.05 }}
-            className="flex items-center gap-3 cursor-pointer"
+            className="flex shrink-0 items-center gap-3 cursor-pointer"
           >
-            <div className="grid">
+            <div className="grid h-12 w-[116px] shrink-0">
               <motion.img
                 src={effieLogo}
                 alt="Effie Awards"
-                className="col-start-1 row-start-1 h-12 w-auto"
+                className="col-start-1 row-start-1 h-12 w-[116px] object-contain"
                 animate={{ opacity: isLightSection ? 0 : 1 }}
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
               />
               <motion.img
                 src={effieLogoLight}
                 alt="Effie Awards"
-                className="col-start-1 row-start-1 h-12 w-auto"
+                className="col-start-1 row-start-1 h-12 w-[116px] object-contain"
                 animate={{ opacity: isLightSection ? 1 : 0 }}
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
               />
@@ -112,7 +112,7 @@ export function Header() {
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex min-w-0 items-center gap-1 lg:gap-2">
             {navItems.map((item, index) => {
               const active = isActive(item.sectionId);
               const textColor = scrolled && isLightSection 
@@ -127,7 +127,7 @@ export function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className="relative px-4 py-2 text-sm tracking-wide whitespace-nowrap group"
+                  className="relative px-2.5 py-2 text-sm tracking-wide whitespace-nowrap group lg:px-4"
                   style={{ color: textColor }}
                 >
                   <span className="relative z-10">{item.label}</span>
