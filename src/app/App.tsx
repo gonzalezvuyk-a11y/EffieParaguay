@@ -6,10 +6,12 @@ import { EffieLatamSection } from './components/EffieLatamSection';
 import { TimelineSection } from './components/TimelineSection';
 import { BenefitsSection } from './components/BenefitsSection';
 import { OrganizationSection } from './components/OrganizationSection';
+import { JudgesPreviewSection } from './components/JudgesPreviewSection';
 import { SponsorsSection } from './components/SponsorsSection';
 import { IconSponsorSection } from './components/IconSponsorSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
+import { JudgesPage } from './components/JudgesPage';
 import { ScrollProgress } from './components/ScrollProgress';
 import { SectionDivider } from './components/SectionDivider';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
@@ -17,6 +19,8 @@ import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
+  const isJudgesPage = window.location.pathname.replace(/\/+$/, '') === '/jurados';
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     document.documentElement.style.scrollBehavior = 'auto';
@@ -99,27 +103,33 @@ export default function App() {
     <div className="min-h-screen relative" style={{ backgroundColor: '#000000' }}>
       <ScrollProgress />
       <Header />
-      <main>
-        <HeroSection />
-        <SectionDivider />
-        <AboutSection />
-        <SectionDivider />
-        <TimelineSection />
-        <BenefitsSection />
-        <SectionDivider />
-        <CategoriesSection />
-        <SectionDivider />
-        <EffieLatamSection />
-        <SectionDivider />
-        <OrganizationSection />
-        <SectionDivider />
-        {/* Auspiciantes - ICON */}
-        <IconSponsorSection />
-        <SectionDivider />
-        <SponsorsSection />
-        <SectionDivider />
-        <ContactSection />
-      </main>
+      {isJudgesPage ? (
+        <JudgesPage />
+      ) : (
+        <main>
+          <HeroSection />
+          <SectionDivider />
+          <AboutSection />
+          <SectionDivider />
+          <TimelineSection />
+          <BenefitsSection />
+          <SectionDivider />
+          <CategoriesSection />
+          <SectionDivider />
+          <EffieLatamSection />
+          <SectionDivider />
+          <OrganizationSection />
+          <SectionDivider />
+          <JudgesPreviewSection />
+          <SectionDivider />
+          {/* Auspiciantes - ICON */}
+          <IconSponsorSection />
+          <SectionDivider />
+          <SponsorsSection />
+          <SectionDivider />
+          <ContactSection />
+        </main>
+      )}
       <Footer />
       <WhatsAppFloatingButton />
       <Analytics />

@@ -3,6 +3,9 @@ import { Star } from 'lucide-react';
 import logoICON from '../../assets/logoicon.png';
 import logoGuarani from '../../assets/guarani-films.png';
 import logoPressencia from '../../assets/pressencia.png';
+import logoBunkerDb from '../../assets/bunker-db.png';
+import logoEquilibrium from '../../assets/equilibrium.svg';
+import logoAudimedia from '../../assets/audimedia.png';
 
 export function IconSponsorSection() {
   return (
@@ -35,11 +38,14 @@ export function IconSponsorSection() {
               Auspiciantes
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
             {[
-              { logo: logoICON, alt: 'ICON', href: 'https://iconlat.com/' },
-              { logo: logoGuarani, alt: 'Guarani Films', href: 'https://www.guaranifilms.com/' },
-              { logo: logoPressencia, alt: 'Pressencia Comunicación', href: 'https://www.pressencia.com.py/' },
+              { logo: logoICON, alt: 'ICON', href: 'https://iconlat.com/', logoClassName: 'h-10 max-w-28' },
+              { logo: logoGuarani, alt: 'Guarani Films', href: 'https://www.guaranifilms.com/', logoClassName: 'h-12 max-w-32' },
+              { logo: logoPressencia, alt: 'Pressencia Comunicación', href: 'https://www.pressencia.com.py/', logoClassName: 'h-10 max-w-36' },
+              { logo: logoBunkerDb, alt: 'Bunker DB', href: 'https://bunkerdb.com/en', logoClassName: 'h-10 max-w-36 filter brightness-0 invert' },
+              { logo: logoEquilibrium, alt: 'Equilibrium', href: 'https://equilibriumbdc.com/', logoClassName: 'h-10 max-w-36 filter brightness-0 invert' },
+              { logo: logoAudimedia, alt: 'Audimedia', href: 'https://audimedia.com.py/', logoClassName: 'h-10 max-w-36 filter brightness-0 invert' },
             ].map((sponsor, index) => (
               <motion.a
                 key={index}
@@ -82,7 +88,7 @@ export function IconSponsorSection() {
                   <img 
                     src={sponsor.logo} 
                     alt={sponsor.alt}
-                    className="h-12 w-auto object-contain opacity-75 group-hover:opacity-100 transition-all duration-500 relative z-10"
+                    className={`${sponsor.logoClassName} w-auto object-contain opacity-75 group-hover:opacity-100 transition-all duration-500 relative z-10`}
                   />
                 </motion.div>
               </motion.a>

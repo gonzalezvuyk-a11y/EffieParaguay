@@ -11,6 +11,9 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('inicio');
   const [isLightSection, setIsLightSection] = useState(false);
+  const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+  const isJudgesPage = currentPath === '/jurados';
+  const sectionHref = (sectionId: string) => isJudgesPage ? `/#${sectionId}` : `#${sectionId}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,18 +42,23 @@ export function Header() {
   }, []);
 
   const navItems = [
-    { label: 'Inicio', href: '#inicio' },
-    { label: 'Qué es Effie', href: '#que-es' },
-    { label: 'Calendario', href: '#calendario' },
-    { label: 'Categorías', href: '#categorias' },
-    { label: 'Effie LATAM', href: '#effie-latam' },
-    { label: 'Organización', href: '#organizacion' },
-    { label: 'Aliados', href: '#aliados' },
-    { label: 'Contacto', href: '#contacto' },
+    { label: 'Inicio', href: sectionHref('inicio'), sectionId: 'inicio' },
+    { label: 'Qué es Effie', href: sectionHref('que-es'), sectionId: 'que-es' },
+    { label: 'Calendario', href: sectionHref('calendario'), sectionId: 'calendario' },
+    { label: 'Categorías', href: sectionHref('categorias'), sectionId: 'categorias' },
+    { label: 'Effie LATAM', href: sectionHref('effie-latam'), sectionId: 'effie-latam' },
+    { label: 'Organización', href: sectionHref('organizacion'), sectionId: 'organizacion' },
+    { label: 'Jurados', href: '/jurados', sectionId: 'jurados' },
+    { label: 'Aliados', href: sectionHref('aliados'), sectionId: 'aliados' },
+    { label: 'Contacto', href: sectionHref('contacto'), sectionId: 'contacto' },
   ];
 
-  const isActive = (href: string) => {
-    return `#${activeSection}` === href;
+  const isActive = (sectionId: string) => {
+    if (isJudgesPage) {
+      return sectionId === 'jurados';
+    }
+
+    return activeSection === sectionId;
   };
 
   const mobileMenuTextColor = scrolled && isLightSection ? '#1a1a1a' : '#FFFFFF';
@@ -80,7 +88,8 @@ export function Header() {
       >
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           {/* Logo */}
-          <motion.div
+          <motion.a
+            href="/"
             whileHover={{ scale: 1.05 }}
             className="flex items-center gap-3 cursor-pointer"
           >
@@ -100,12 +109,12 @@ export function Header() {
                 transition={{ duration: 0.35, ease: 'easeInOut' }}
               />
             </div>
-          </motion.div>
+          </motion.a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-2">
             {navItems.map((item, index) => {
-              const active = isActive(item.href);
+              const active = isActive(item.sectionId);
               const textColor = scrolled && isLightSection 
                 ? (active ? '#B89650' : '#1a1a1a')
                 : (active ? '#B89650' : '#FFFFFF');

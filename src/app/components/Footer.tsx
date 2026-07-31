@@ -4,18 +4,21 @@ import effieLogo from '../../assets/50ca5ee8af00d3d0e3dfb019f7124297732c358e.png
 
 export function Footer() {
   const mailchimpActionUrl = 'https://iconlat.us6.list-manage.com/subscribe/post?u=dc044521c43efd0b6b6f8a402&id=9d17fb6bd9&f_id=003e0be3f0';
+  const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
+  const sectionHref = (sectionId: string) => currentPath === '/jurados' ? `/#${sectionId}` : `#${sectionId}`;
 
   const footerLinks = {
     'Effie Awards': [
-      { label: 'Qué es Effie', href: '#que-es' },
-      { label: 'Categorías', href: '#categorias' },
-      { label: 'Calendario', href: '#calendario' },
+      { label: 'Qué es Effie', href: sectionHref('que-es') },
+      { label: 'Categorías', href: sectionHref('categorias') },
+      { label: 'Calendario', href: sectionHref('calendario') },
+      { label: 'Jurados 2026', href: '/jurados' },
       { label: 'Effie Index', href: 'https://www.effieindex.com/' },
     ],
     recursos: [
       { label: 'Bases y Condiciones', href: 'https://drive.google.com/file/d/14NKE5mVLCJ_r_hEvcYo2kLAkYuSwh2N1/view?usp=drive_link' },
       { label: 'Guía de Inscripción', href: 'https://drive.google.com/file/d/1qHaExVouoK9dQjzaOZTgETZzBcb5jXZt/view?usp=drive_link' },
-      { label: 'Contacto', href: '#contacto' },
+      { label: 'Contacto', href: sectionHref('contacto') },
     ],
   };
   const isExternal = (url: string) => /^https?:\/\//.test(url);

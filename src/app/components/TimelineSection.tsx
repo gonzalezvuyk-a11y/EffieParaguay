@@ -79,7 +79,7 @@ export function TimelineSection() {
     },
     {
       title: 'Jurado Segunda Fase',
-      date: '3 de septiembre',
+      date: '01 de septiembre',
       align: 'right',
     },
     {

@@ -6,6 +6,7 @@ import logoFAC from '../../assets/579f03a2d91524519d73697d5d47e5960f44bdbc.png';
 import logoEletrcub from '../../assets/94c36a98462ef404415ed858ab26a2905e7eb883.png';
 import logoICON from '../../assets/62e24a5913cfd512c8c297f256a814697e9a3045.png';
 import logoCerneco from '../../assets/cerneco.png';
+import logoClubEjecutivos from '../../assets/club-de-ejecutivos.png';
 import { DotsPattern } from './DotsPattern';
 
 export function SponsorsSection() {
@@ -101,13 +102,14 @@ export function SponsorsSection() {
           </div>
 
           {/* Alliances Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
             {[
               { logo: logoCerneco, name: 'Cerneco', alt: 'Cerneco', href: 'https://www.cerneco.org.py/', invert: false },
               { logo: logoICON, name: 'ICON', alt: 'ICON', href: 'https://iconlat.com/', invert: false },
               { logo: logoEletrcub, name: 'CAP', alt: 'Consejo Argentino de Publicidad', href: 'https://revistacap.com.py/', invert: false },
               { logo: logoCAP, name: 'El Círculo', alt: 'El Círculo', href: 'https://elcirculo.org.py/', invert: true },
               { logo: logoFAC, name: 'FIC', alt: 'Federación de Industrias Creativas', href: 'https://fic.org.py/', invert: true },
+              { logo: logoClubEjecutivos, name: 'Club de Ejecutivos', alt: 'Club de Ejecutivos', href: 'https://www.clubdeejecutivos.org.py/', invert: true },
             ].map((alliance, index) => (
               <motion.a
                 key={index}
