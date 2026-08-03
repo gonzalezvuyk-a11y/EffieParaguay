@@ -16,8 +16,8 @@ export const judges: Judge[] = [
     "organization": "ABC"
   },
   {
-    "name": "Alejandro Jermolieff",
-    "title": "Director de Marketing",
+    "name": "Natalia Benitez",
+    "title": "Jefe de Marketing",
     "organization": "Arcor del Paraguay"
   },
   {
@@ -111,9 +111,9 @@ export const judges: Judge[] = [
     "organization": "Nestle"
   },
   {
-    "name": "Camilo Guanes",
-    "title": "Director General Creativo",
-    "organization": "Oniria\\TBWA"
+    "name": "Daniel Achaval",
+    "title": "CEO",
+    "organization": "Oniria"
   },
   {
     "name": "Vania Lima",
@@ -134,11 +134,6 @@ export const judges: Judge[] = [
     "name": "Carolina Silva",
     "title": "Gerente de Marketing",
     "organization": "Puma Energy"
-  },
-  {
-    "name": "Gustavo Eguez",
-    "title": "Presidente de la CAP - TEISA",
-    "organization": "TEISA"
   },
   {
     "name": "Karina Santacruz",
@@ -212,8 +207,8 @@ export const judges: Judge[] = [
   },
   {
     "name": "Natalia Cabarcos",
-    "title": "Gerente de Comunicación Digital",
-    "organization": "APF"
+    "title": "Comunicadora",
+    "organization": ""
   },
   {
     "name": "Paloma Cella",
@@ -274,6 +269,11 @@ export const judges: Judge[] = [
     "name": "Laura Benitez",
     "title": "Gerente de Marketing",
     "organization": "Aj vierci"
+  },
+  {
+    "name": "Fernando Duarte",
+    "title": "Gerente General de la división de televisión",
+    "organization": "Grupo AJ Vierci"
   },
   {
     "name": "Andrea Miranda",
