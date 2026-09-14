@@ -12,6 +12,7 @@ import { IconSponsorSection } from './components/IconSponsorSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { JudgesPage } from './components/JudgesPage';
+import { FinalistsPage } from './components/FinalistsPage';
 import { ScrollProgress } from './components/ScrollProgress';
 import { SectionDivider } from './components/SectionDivider';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
@@ -19,7 +20,9 @@ import { useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
-  const isJudgesPage = window.location.pathname.replace(/\/+$/, '') === '/jurados';
+  const currentPath = window.location.pathname.replace(/\/+$/, '');
+  const isJudgesPage = currentPath === '/jurados';
+  const isFinalistsPage = currentPath === '/finalistas';
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -105,6 +108,8 @@ export default function App() {
       <Header />
       {isJudgesPage ? (
         <JudgesPage />
+      ) : isFinalistsPage ? (
+        <FinalistsPage />
       ) : (
         <main>
           <HeroSection />

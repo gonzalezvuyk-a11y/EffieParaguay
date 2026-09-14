@@ -5,7 +5,7 @@ import effieLogo from '../../assets/50ca5ee8af00d3d0e3dfb019f7124297732c358e.png
 export function Footer() {
   const mailchimpActionUrl = 'https://iconlat.us6.list-manage.com/subscribe/post?u=dc044521c43efd0b6b6f8a402&id=9d17fb6bd9&f_id=003e0be3f0';
   const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
-  const sectionHref = (sectionId: string) => currentPath === '/jurados' ? `/#${sectionId}` : `#${sectionId}`;
+  const sectionHref = (sectionId: string) => currentPath === '/' ? `#${sectionId}` : `/#${sectionId}`;
 
   const footerLinks = {
     'Effie Awards': [

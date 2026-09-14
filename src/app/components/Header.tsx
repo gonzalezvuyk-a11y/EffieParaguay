@@ -13,7 +13,8 @@ export function Header() {
   const [isLightSection, setIsLightSection] = useState(false);
   const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
   const isJudgesPage = currentPath === '/jurados';
-  const sectionHref = (sectionId: string) => isJudgesPage ? `/#${sectionId}` : `#${sectionId}`;
+  const isHomePage = currentPath === '/';
+  const sectionHref = (sectionId: string) => isHomePage ? `#${sectionId}` : `/#${sectionId}`;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,8 +55,8 @@ export function Header() {
   ];
 
   const isActive = (sectionId: string) => {
-    if (isJudgesPage) {
-      return sectionId === 'jurados';
+    if (!isHomePage) {
+      return isJudgesPage && sectionId === 'jurados';
     }
 
     return activeSection === sectionId;
