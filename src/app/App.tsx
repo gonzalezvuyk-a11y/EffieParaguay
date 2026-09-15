@@ -14,13 +14,27 @@ import { FinalistsPage } from './components/FinalistsPage';
 import { ScrollProgress } from './components/ScrollProgress';
 import { SectionDivider } from './components/SectionDivider';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
+
+const RegistrationPage = lazy(() => import('./components/tickets/RegistrationPage').then((m) => ({ default: m.RegistrationPage })));
+const TicketPage = lazy(() => import('./components/tickets/TicketPage').then((m) => ({ default: m.TicketPage })));
+const PanelPage = lazy(() => import('./components/tickets/PanelPage').then((m) => ({ default: m.PanelPage })));
+const DoorPage = lazy(() => import('./components/tickets/DoorPage').then((m) => ({ default: m.DoorPage })));
+
+const TICKET_ROUTES: Record<string, React.ComponentType> = {
+  '/entradas': RegistrationPage,
+  '/entradas/ticket': TicketPage,
+  '/entradas/panel': PanelPage,
+  '/entradas/puerta': DoorPage,
+};
 
 export default function App() {
   const currentPath = window.location.pathname.replace(/\/+$/, '');
   const isJudgesPage = currentPath === '/jurados';
   const isFinalistsPage = currentPath === '/finalistas';
+  const TicketRoute = TICKET_ROUTES[currentPath];
+  const isStaffRoute = currentPath === '/entradas/panel' || currentPath === '/entradas/puerta';
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -104,7 +118,11 @@ export default function App() {
     <div className="min-h-screen relative" style={{ backgroundColor: '#000000' }}>
       <ScrollProgress />
       <Header />
-      {isJudgesPage ? (
+      {TicketRoute ? (
+        <Suspense fallback={<div className="min-h-screen" style={{ backgroundColor: '#0a0a0a' }} aria-busy="true" />}>
+          <TicketRoute />
+        </Suspense>
+      ) : isJudgesPage ? (
         <JudgesPage />
       ) : isFinalistsPage ? (
         <FinalistsPage />
@@ -129,7 +147,7 @@ export default function App() {
         </main>
       )}
       <Footer />
-      <WhatsAppFloatingButton />
+      {!isStaffRoute && <WhatsAppFloatingButton />}
       <Analytics />
     </div>
   );
