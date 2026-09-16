@@ -18,9 +18,9 @@ type StaffGateProps = {
 export function StaffGate({ title, children }: StaffGateProps) {
   const [state, setState] = useState<GateState>({ status: 'loading' });
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isBusy, setIsBusy] = useState(false);
+  const [linkSent, setLinkSent] = useState(false);
 
   useEffect(() => {
     document.title = `${title} | Effie Paraguay`;
@@ -41,13 +41,24 @@ export function StaffGate({ title, children }: StaffGateProps) {
     return () => listener.subscription.unsubscribe();
   }, [title]);
 
-  const signIn = async (event: FormEvent) => {
+  const sendLink = async (event: FormEvent) => {
     event.preventDefault();
     setError('');
     setIsBusy(true);
-    const { error: authError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    const { error: authError } = await supabase.auth.signInWithOtp({
+      email: email.trim().toLowerCase(),
+      options: { emailRedirectTo: window.location.href },
+    });
     setIsBusy(false);
-    if (authError) setError('Correo o contraseña incorrectos.');
+    if (authError) {
+      setError(
+        authError.message.toLowerCase().includes('rate')
+          ? 'Se enviaron demasiados links seguidos. Esperá un minuto y probá otra vez.'
+          : 'No pudimos enviar el link. Revisá el correo e intentá de nuevo.'
+      );
+      return;
+    }
+    setLinkSent(true);
   };
 
   if (state.status === 'ready') return <>{children(state.session)}</>;
@@ -71,15 +82,33 @@ export function StaffGate({ title, children }: StaffGateProps) {
         )}
 
         {state.status === 'signed-out' && (
-          <form onSubmit={signIn} noValidate className="space-y-4">
-            <p className="text-sm" style={{ color: TEXT_MUTED }}>Acceso solo para el equipo de Effie.</p>
-            <TextField label="Correo" name="email" type="email" autoComplete="username" value={email} onChange={setEmail} />
-            <TextField label="Contraseña" name="password" type="password" autoComplete="current-password" value={password} onChange={setPassword} />
-            {error && <p role="alert" className="text-sm" style={{ color: ERROR_TEXT }}>{error}</p>}
-            <button type="submit" disabled={isBusy} aria-busy={isBusy} className={`w-full ${primaryButton}`} style={{ backgroundColor: GOLD, color: '#000000' }}>
-              {isBusy ? 'Ingresando…' : 'Ingresar'}
-            </button>
-          </form>
+          linkSent ? (
+            <div role="status">
+              <p className="text-sm mb-4" style={{ color: TEXT_MUTED }}>
+                Te enviamos un link a <span style={{ color: '#FFFFFF' }}>{email.trim().toLowerCase()}</span>.
+                Abrilo desde este mismo dispositivo y entrás directo.
+              </p>
+              <button
+                type="button"
+                onClick={() => { setLinkSent(false); setError(''); }}
+                className={secondaryButton}
+                style={{ borderColor: '#333333', color: TEXT_MUTED }}
+              >
+                Usar otro correo
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={sendLink} noValidate className="space-y-4">
+              <p className="text-sm" style={{ color: TEXT_MUTED }}>
+                Acceso solo para el equipo de Effie. Te mandamos un link por correo, sin contraseñas.
+              </p>
+              <TextField label="Correo" name="email" type="email" autoComplete="email" value={email} onChange={setEmail} />
+              {error && <p role="alert" className="text-sm" style={{ color: ERROR_TEXT }}>{error}</p>}
+              <button type="submit" disabled={isBusy || !email.trim()} aria-busy={isBusy} className={`w-full ${primaryButton}`} style={{ backgroundColor: GOLD, color: '#000000' }}>
+                {isBusy ? 'Enviando link…' : 'Enviarme el link'}
+              </button>
+            </form>
+          )
         )}
       </div>
     </TicketShell>
