@@ -108,9 +108,7 @@ export default function App() {
           <HeroSection />
           <SectionDivider />
           <AboutSection />
-          <SectionDivider />
           <JudgesPreviewSection />
-          <SectionDivider />
           <CategoriesSection />
           <SectionDivider />
           <EffieLatamSection />

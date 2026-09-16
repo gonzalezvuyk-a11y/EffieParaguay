@@ -10,13 +10,6 @@ export function JudgesPreviewSection() {
       className="py-28 relative overflow-hidden"
       style={{ backgroundColor: '#F7F5EF' }}
     >
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background: 'linear-gradient(to right, transparent, rgba(144, 112, 48, 0.28), transparent)',
-        }}
-      />
-
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
