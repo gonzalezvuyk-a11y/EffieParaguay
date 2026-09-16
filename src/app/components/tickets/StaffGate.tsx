@@ -21,6 +21,7 @@ export function StaffGate({ title, children }: StaffGateProps) {
   const [error, setError] = useState('');
   const [isBusy, setIsBusy] = useState(false);
   const [linkSent, setLinkSent] = useState(false);
+  const [codeOrLink, setCodeOrLink] = useState('');
 
   useEffect(() => {
     document.title = `${title} | Effie Paraguay`;
@@ -61,6 +62,32 @@ export function StaffGate({ title, children }: StaffGateProps) {
     setLinkSent(true);
   };
 
+  // The emailed link can land on another browser (or bounce to the configured
+  // site URL), so accept the code or the pasted link as a way in too.
+  const verifyCodeOrLink = async (event: FormEvent) => {
+    event.preventDefault();
+    setError('');
+    setIsBusy(true);
+    const input = codeOrLink.trim();
+    let result;
+    if (/^\d{6}$/.test(input)) {
+      result = await supabase.auth.verifyOtp({ email: email.trim().toLowerCase(), token: input, type: 'email' });
+    } else {
+      let tokenHash = '';
+      try {
+        const url = new URL(input);
+        tokenHash = url.searchParams.get('token') ?? url.searchParams.get('token_hash') ?? '';
+      } catch {
+        tokenHash = '';
+      }
+      result = tokenHash
+        ? await supabase.auth.verifyOtp({ token_hash: tokenHash, type: 'magiclink' })
+        : { error: new Error('invalid') };
+    }
+    setIsBusy(false);
+    if (result.error) setError('Ese código o link no sirvió. Puede haber vencido: pedí uno nuevo.');
+  };
+
   if (state.status === 'ready') return <>{children(state.session)}</>;
 
   return (
@@ -83,15 +110,29 @@ export function StaffGate({ title, children }: StaffGateProps) {
 
         {state.status === 'signed-out' && (
           linkSent ? (
-            <div role="status">
-              <p className="text-sm mb-4" style={{ color: TEXT_MUTED }}>
+            <div>
+              <p role="status" className="text-sm mb-5" style={{ color: TEXT_MUTED }}>
                 Te enviamos un link a <span style={{ color: '#FFFFFF' }}>{email.trim().toLowerCase()}</span>.
-                Abrilo desde este mismo dispositivo y entrás directo.
+                Abrilo desde este dispositivo y entrás directo.
               </p>
+              <form onSubmit={verifyCodeOrLink} noValidate className="space-y-4">
+                <TextField
+                  label="¿No te llevó de vuelta acá?"
+                  name="codigo"
+                  value={codeOrLink}
+                  onChange={setCodeOrLink}
+                  autoComplete="one-time-code"
+                  hint="Pegá el link del correo, o el código de 6 dígitos si te llegó así."
+                />
+                {error && <p role="alert" className="text-sm" style={{ color: ERROR_TEXT }}>{error}</p>}
+                <button type="submit" disabled={isBusy || !codeOrLink.trim()} aria-busy={isBusy} className={`w-full ${primaryButton}`} style={{ backgroundColor: GOLD, color: '#000000' }}>
+                  {isBusy ? 'Verificando…' : 'Entrar con el código o link'}
+                </button>
+              </form>
               <button
                 type="button"
-                onClick={() => { setLinkSent(false); setError(''); }}
-                className={secondaryButton}
+                onClick={() => { setLinkSent(false); setError(''); setCodeOrLink(''); }}
+                className={`mt-4 ${secondaryButton}`}
                 style={{ borderColor: '#333333', color: TEXT_MUTED }}
               >
                 Usar otro correo
