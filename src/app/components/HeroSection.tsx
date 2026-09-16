@@ -1,11 +1,10 @@
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import effieGif from '../../assets/0a75d0ddf2653507a1ac14e86fc1c8bd276cf698.png';
 import { DotsPattern } from './DotsPattern';
 import { MagneticButton } from './MagneticButton';
 
-const REGISTRATION_URL = 'https://effie-paraguay.acclaimworks.com/uba/auth';
 
 interface TimeLeft {
   days: number;
@@ -165,7 +164,7 @@ export function HeroSection() {
   });
 
   useEffect(() => {
-    const targetDate = new Date('2026-04-24T23:59:00').getTime();
+    const targetDate = new Date('2026-10-15T20:00:00').getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -444,7 +443,7 @@ export function HeroSection() {
               >
                 <Sparkles className="w-4 h-4" style={{ color: '#B89650' }} />
                 <span className="text-sm" style={{ color: '#999999' }}>
-                  Edición 2026 • Inscripciones Abiertas
+                  Edición 2026 • Premiación 15 de octubre
                 </span>
               </motion.div>
 
@@ -483,37 +482,7 @@ export function HeroSection() {
                 medibles y generan impacto real en el mercado paraguayo.
               </motion.p>
 
-              {/* CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
-                className="flex flex-col sm:flex-row gap-4 pt-4"
-              >
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group px-8 py-4 rounded-full font-medium flex items-center justify-center gap-2 transition-all cursor-pointer"
-                  style={{
-                    backgroundColor: '#B89650',
-                    color: '#000000',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#ffffff';
-                    e.currentTarget.style.color = '#B89650';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#B89650';
-                    e.currentTarget.style.color = '#000000';
-                  }}
-                  onClick={() => window.open(REGISTRATION_URL, '_blank', 'noopener,noreferrer')}
-                >
-                  <span>Postulá ahora</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </motion.button>
-              </motion.div>
-
-              {/* Countdown - Apertura de Inscripciones */}
+              {/* Countdown - Noche de premiación */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -522,7 +491,7 @@ export function HeroSection() {
               >
                 <div className="text-center mb-4">
                   <p className="text-sm uppercase tracking-wider" style={{ color: '#999999' }}>
-                    1er CIERRE EARLY BIRDS
+                    EVENTO DE PREMIACIÓN · 15 DE OCTUBRE
                   </p>
                 </div>
                 

@@ -4,8 +4,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import effieLogo from '../../assets/50ca5ee8af00d3d0e3dfb019f7124297732c358e.png';
 import effieLogoLight from '../../assets/8b95d916e317d94d42fa2064da5c9ed583c35a80.png';
 
-const REGISTRATION_URL = 'https://effie-paraguay.acclaimworks.com/uba/auth';
-
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -20,7 +18,7 @@ export function Header() {
       setScrolled(window.scrollY > 50);
 
       // Scroll spy logic
-      const sections = ['inicio', 'que-es', 'calendario', 'categorias', 'effie-latam', 'organizacion', 'aliados', 'contacto'];
+      const sections = ['inicio', 'que-es', 'jurados-preview', 'categorias', 'effie-latam', 'organizacion', 'aliados', 'contacto'];
       const scrollPosition = window.scrollY + 100;
 
       for (const sectionId of sections) {
@@ -30,7 +28,7 @@ export function Header() {
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(sectionId);
             // Detect light sections
-            setIsLightSection(['calendario', 'contacto'].includes(sectionId));
+            setIsLightSection(['contacto'].includes(sectionId));
             break;
           }
         }
@@ -44,7 +42,6 @@ export function Header() {
   const navItems = [
     { label: 'Inicio', href: sectionHref('inicio'), sectionId: 'inicio' },
     { label: 'Qué es Effie', href: sectionHref('que-es'), sectionId: 'que-es' },
-    { label: 'Calendario', href: sectionHref('calendario'), sectionId: 'calendario' },
     { label: 'Categorías', href: sectionHref('categorias'), sectionId: 'categorias' },
     { label: 'Effie LATAM', href: sectionHref('effie-latam'), sectionId: 'effie-latam' },
     { label: 'Organización', href: sectionHref('organizacion'), sectionId: 'organizacion' },
@@ -146,18 +143,6 @@ export function Header() {
                 </motion.a>
               );
             })}
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="ml-4 px-6 py-2 rounded-full font-medium transition-all cursor-pointer"
-              style={{
-                backgroundColor: '#B89650',
-                color: '#000000',
-              }}
-              onClick={() => window.open(REGISTRATION_URL, '_blank', 'noopener,noreferrer')}
-            >
-              Inscríbete
-            </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -202,19 +187,6 @@ export function Header() {
                   {item.label}
                 </motion.a>
               ))}
-              <motion.button
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: navItems.length * 0.1 }}
-                className="w-full px-6 py-2 rounded-full font-medium cursor-pointer"
-                style={{
-                  backgroundColor: '#B89650',
-                  color: '#000000',
-                }}
-                onClick={() => window.open(REGISTRATION_URL, '_blank', 'noopener,noreferrer')}
-              >
-                Postulá
-              </motion.button>
             </motion.div>
           )}
         </AnimatePresence>

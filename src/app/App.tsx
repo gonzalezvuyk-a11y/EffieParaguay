@@ -3,8 +3,6 @@ import { HeroSection } from './components/HeroSection';
 import { AboutSection } from './components/AboutSection';
 import { CategoriesSection } from './components/CategoriesSection';
 import { EffieLatamSection } from './components/EffieLatamSection';
-import { TimelineSection } from './components/TimelineSection';
-import { BenefitsSection } from './components/BenefitsSection';
 import { OrganizationSection } from './components/OrganizationSection';
 import { JudgesPreviewSection } from './components/JudgesPreviewSection';
 import { SponsorsSection } from './components/SponsorsSection';
@@ -111,16 +109,13 @@ export default function App() {
           <SectionDivider />
           <AboutSection />
           <SectionDivider />
-          <TimelineSection />
-          <BenefitsSection />
+          <JudgesPreviewSection />
           <SectionDivider />
           <CategoriesSection />
           <SectionDivider />
           <EffieLatamSection />
           <SectionDivider />
           <OrganizationSection />
-          <SectionDivider />
-          <JudgesPreviewSection />
           <SectionDivider />
           {/* Auspiciantes - ICON */}
           <IconSponsorSection />
