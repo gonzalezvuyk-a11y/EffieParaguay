@@ -11,6 +11,7 @@ export function Header() {
   const [isLightSection, setIsLightSection] = useState(false);
   const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
   const isJudgesPage = currentPath === '/jurados';
+  const isFinalistsPage = currentPath === '/finalistas';
   const isHomePage = currentPath === '/';
   const sectionHref = (sectionId: string) => isHomePage ? `#${sectionId}` : `/#${sectionId}`;
 
@@ -46,6 +47,7 @@ export function Header() {
     { label: 'Categorías', href: sectionHref('categorias'), sectionId: 'categorias' },
     { label: 'Effie LATAM', href: sectionHref('effie-latam'), sectionId: 'effie-latam' },
     { label: 'Organización', href: sectionHref('organizacion'), sectionId: 'organizacion' },
+    { label: 'Finalistas', href: '/finalistas', sectionId: 'finalistas' },
     { label: 'Jurados', href: '/jurados', sectionId: 'jurados' },
     { label: 'Aliados', href: sectionHref('aliados'), sectionId: 'aliados' },
     { label: 'Contacto', href: sectionHref('contacto'), sectionId: 'contacto' },
@@ -53,7 +55,7 @@ export function Header() {
 
   const isActive = (sectionId: string) => {
     if (!isHomePage) {
-      return isJudgesPage && sectionId === 'jurados';
+      return (isJudgesPage && sectionId === 'jurados') || (isFinalistsPage && sectionId === 'finalistas');
     }
 
     return activeSection === sectionId;
@@ -110,7 +112,7 @@ export function Header() {
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex min-w-0 items-center gap-1 lg:gap-2">
+          <div className="hidden xl:flex min-w-0 items-center gap-1 lg:gap-2">
             {navItems.map((item, index) => {
               const active = isActive(item.sectionId);
               const textColor = scrolled && isLightSection 
@@ -148,7 +150,7 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden"
+            className="xl:hidden"
             style={{ color: scrolled && isLightSection ? '#1a1a1a' : '#FFFFFF' }}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
@@ -164,7 +166,7 @@ export function Header() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden mt-4 pb-4 space-y-3 overflow-hidden"
+              className="xl:hidden mt-4 pb-4 space-y-3 overflow-hidden"
             >
               {navItems.map((item, index) => (
                 <motion.a

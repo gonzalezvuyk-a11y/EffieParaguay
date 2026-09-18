@@ -11,6 +11,7 @@ export function Footer() {
     'Effie Awards': [
       { label: 'Qué es Effie', href: sectionHref('que-es') },
       { label: 'Categorías', href: sectionHref('categorias') },
+      { label: 'Finalistas 2026', href: '/finalistas' },
       { label: 'Jurados 2026', href: '/jurados' },
       { label: 'Effie Index', href: 'https://www.effieindex.com/' },
     ],
