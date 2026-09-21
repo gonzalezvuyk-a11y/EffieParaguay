@@ -6,14 +6,14 @@ export type Finalist = {
 };
 
 export const finalists: Finalist[] = [
-  { category: 'Telecomunicaciones', brand: 'Personal Flow', caseName: 'Flow x Flow', agency: 'Wild Fi' },
-  { category: 'Digital Commerce', brand: 'Tienda Personal', caseName: 'Keywords de la gente', agency: 'Wild Fi' },
+  { category: 'Telecomunicaciones', brand: 'Personal', caseName: 'Flow x Flow', agency: 'Wild Fi' },
+  { category: 'Digital Commerce', brand: 'Personal', caseName: 'Keywords de la gente', agency: 'Wild Fi' },
   { category: 'Éxito Sostenido', brand: 'Personal', caseName: 'Personal Más Personal', agency: 'Wild Fi' },
   { category: 'Bajo presupuesto - Productos', brand: 'Resacol Forte', caseName: 'Resacol Forte', agency: 'El Creativo' },
   { category: 'Marketing Estacional', brand: 'Pilsen', caseName: 'Dispenser de Identidad', agency: 'Oniria TBWA' },
   { category: 'David versus Goliat', brand: 'Cortagrip', caseName: 'Escuadrón de Abuelas', agency: 'Biedermann' },
-  { category: 'Retail', brand: 'Tienda Personal', caseName: 'Keywords de la gente', agency: 'Wild Fi' },
-  { category: 'Marketing Estacional', brand: 'Personal Flow', caseName: 'Flow x Flow', agency: 'Wild Fi' },
+  { category: 'Retail', brand: 'Personal', caseName: 'Keywords de la gente', agency: 'Wild Fi' },
+  { category: 'Marketing Estacional', brand: 'Personal', caseName: 'Flow x Flow', agency: 'Wild Fi' },
   { category: 'Digital Commerce', brand: 'TaDa', caseName: 'Domicilios con Descuento', agency: 'Wild Fi' },
   { category: 'Marketing Estacional', brand: 'Amstel', caseName: 'Amstel - Todas las emociones entran en juego', agency: 'Kausa Central Creativa' },
   { category: 'Éxito Sostenido', brand: 'Carreras Universitarias de Grado', caseName: 'Llevate la universidad', agency: 'AYO Agencia de Autor' },
