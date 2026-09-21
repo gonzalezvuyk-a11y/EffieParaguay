@@ -10,7 +10,7 @@ export const finalists: Finalist[] = [
   { category: 'Digital Commerce', brand: 'Tienda Personal', caseName: 'Keywords de la gente', agency: 'Wild Fi' },
   { category: 'Éxito Sostenido', brand: 'Personal', caseName: 'Personal Más Personal', agency: 'Wild Fi' },
   { category: 'Bajo presupuesto - Productos', brand: 'Resacol Forte', caseName: 'Resacol Forte', agency: 'El Creativo' },
-  { category: 'Marketing Estacional', brand: 'Pilsen', caseName: 'Dispenser de Identidad', agency: 'Oniria S.A.' },
+  { category: 'Marketing Estacional', brand: 'Pilsen', caseName: 'Dispenser de Identidad', agency: 'Oniria TBWA' },
   { category: 'David versus Goliat', brand: 'Cortagrip', caseName: 'Escuadrón de Abuelas', agency: 'Biedermann' },
   { category: 'Retail', brand: 'Tienda Personal', caseName: 'Keywords de la gente', agency: 'Wild Fi' },
   { category: 'Marketing Estacional', brand: 'Personal Flow', caseName: 'Flow x Flow', agency: 'Wild Fi' },
