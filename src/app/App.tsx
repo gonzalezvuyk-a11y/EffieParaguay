@@ -1,6 +1,7 @@
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { AboutSection } from './components/AboutSection';
+import { TicketsSection } from './components/TicketsSection';
 import { CategoriesSection } from './components/CategoriesSection';
 import { EffieLatamSection } from './components/EffieLatamSection';
 import { OrganizationSection } from './components/OrganizationSection';
@@ -133,6 +134,7 @@ export default function App() {
           <HeroSection />
           <SectionDivider />
           <AboutSection />
+          <TicketsSection />
           <JudgesPreviewSection />
           <CategoriesSection />
           <SectionDivider />

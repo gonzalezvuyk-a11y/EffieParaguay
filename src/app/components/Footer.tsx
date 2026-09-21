@@ -10,6 +10,7 @@ export function Footer() {
   const footerLinks = {
     'Effie Awards': [
       { label: 'Qué es Effie', href: sectionHref('que-es') },
+      { label: 'Entradas', href: '/entradas' },
       { label: 'Categorías', href: sectionHref('categorias') },
       { label: 'Finalistas 2026', href: '/finalistas' },
       { label: 'Jurados 2026', href: '/jurados' },
