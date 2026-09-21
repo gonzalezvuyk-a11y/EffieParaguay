@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { Download, KeyRound, Trash2 } from 'lucide-react';
+import { Fragment, useCallback, useEffect, useState, type FormEvent } from 'react';
+import { ChevronDown, Download, KeyRound, Trash2 } from 'lucide-react';
 import { errorMessage, supabase } from '../../lib/tickets';
 import { downloadCsv, formatDateTime } from '../../lib/csv';
 import { StaffGate } from './StaffGate';
 import { BulkCompanies } from './BulkCompanies';
 import { AttendeesTable } from './AttendeesTable';
+import { CompanyDetail } from './CompanyDetail';
 import {
   ERROR_TEXT, GOLD, RULE, SURFACE, TEXT_MUTED, TEXT_SUBTLE, TextField, TicketShell,
   focusRing, primaryButton, secondaryButton,
@@ -31,6 +32,7 @@ function Panel() {
   const [capacityDraft, setCapacityDraft] = useState('');
   const [newName, setNewName] = useState('');
   const [newQuota, setNewQuota] = useState('');
+  const [expandedId, setExpandedId] = useState('');
 
   const load = useCallback(async () => {
     const [settings, companies, codes, attendees] = await Promise.all([
@@ -190,23 +192,43 @@ function Panel() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.companies.map((company) => (
-                    <CompanyRow
-                      key={company.id}
-                      company={company}
-                      issued={data.codes.filter((c) => c.company_id === company.id).length}
-                      registered={data.attendees.filter((a) => a.company_id === company.id).length}
-                      busyKey={busyKey}
-                      onSaveQuota={(quota) => run(`quota-${company.id}`, () => supabase.from('companies').update({ quota }).eq('id', company.id), `Cupo de ${company.name} actualizado.`)}
-                      onGenerate={(count) => run(`gen-${company.id}`, () => supabase.rpc('generate_codes', { p_company_id: company.id, p_count: count }), `${count} códigos generados para ${company.name}.`)}
-                      onExport={() => exportCodes(company)}
-                      onDelete={() => {
-                        if (window.confirm(`¿Eliminar ${company.name} y sus códigos sin usar? No se puede deshacer.`)) {
-                          run(`del-${company.id}`, () => supabase.from('companies').delete().eq('id', company.id), `${company.name} eliminada.`);
-                        }
-                      }}
-                    />
-                  ))}
+                  {data.companies.map((company) => {
+                    const companyCodes = data.codes.filter((c) => c.company_id === company.id);
+                    const companyAttendees = data.attendees.filter((a) => a.company_id === company.id);
+                    const isExpanded = expandedId === company.id;
+                    return (
+                      <Fragment key={company.id}>
+                        <CompanyRow
+                          company={company}
+                          issued={companyCodes.length}
+                          registered={companyAttendees.length}
+                          busyKey={busyKey}
+                          isExpanded={isExpanded}
+                          onToggle={() => setExpandedId(isExpanded ? '' : company.id)}
+                          onSaveQuota={(quota) => run(`quota-${company.id}`, () => supabase.from('companies').update({ quota }).eq('id', company.id), `Cupo de ${company.name} actualizado.`)}
+                          onGenerate={(count) => run(`gen-${company.id}`, () => supabase.rpc('generate_codes', { p_company_id: company.id, p_count: count }), `${count} códigos generados para ${company.name}.`)}
+                          onExport={() => exportCodes(company)}
+                          onDelete={() => {
+                            if (window.confirm(`¿Eliminar ${company.name} y sus códigos sin usar? No se puede deshacer.`)) {
+                              run(`del-${company.id}`, () => supabase.from('companies').delete().eq('id', company.id), `${company.name} eliminada.`);
+                            }
+                          }}
+                        />
+                        {isExpanded && (
+                          <tr key={`${company.id}-detail`}>
+                            <td colSpan={5} className="p-0 border-b" style={{ borderColor: RULE }}>
+                              <CompanyDetail
+                                companyName={company.name}
+                                codes={companyCodes}
+                                attendees={companyAttendees}
+                                onChange={load}
+                              />
+                            </td>
+                          </tr>
+                        )}
+                      </Fragment>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -224,20 +246,37 @@ type CompanyRowProps = {
   issued: number;
   registered: number;
   busyKey: string;
+  isExpanded: boolean;
+  onToggle: () => void;
   onSaveQuota: (quota: number) => void;
   onGenerate: (count: number) => void;
   onExport: () => void;
   onDelete: () => void;
 };
 
-function CompanyRow({ company, issued, registered, busyKey, onSaveQuota, onGenerate, onExport, onDelete }: CompanyRowProps) {
+function CompanyRow({ company, issued, registered, busyKey, isExpanded, onToggle, onSaveQuota, onGenerate, onExport, onDelete }: CompanyRowProps) {
   const [quota, setQuota] = useState(String(company.quota));
   const pending = company.quota - issued;
   const quotaChanged = Number(quota) !== company.quota;
 
   return (
-    <tr className="border-b last:border-b-0 align-middle" style={{ borderColor: '#222222' }}>
-      <th scope="row" className="px-5 py-3 font-normal" style={{ color: '#FFFFFF' }}>{company.name}</th>
+    <tr className="border-b last:border-b-0 align-middle" style={{ borderColor: isExpanded ? 'transparent' : '#222222' }}>
+      <th scope="row" className="px-5 py-3 font-normal">
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={isExpanded}
+          className={`-mx-2 inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 text-left transition-colors hover:bg-white/5 ${focusRing}`}
+          style={{ color: '#FFFFFF' }}
+        >
+          <ChevronDown
+            className="w-4 h-4 shrink-0 transition-transform motion-reduce:transition-none"
+            aria-hidden="true"
+            style={{ color: GOLD, transform: isExpanded ? 'rotate(180deg)' : undefined }}
+          />
+          {company.name}
+        </button>
+      </th>
       <td className="px-3 py-3">
         <div className="flex items-center gap-2">
           <input
