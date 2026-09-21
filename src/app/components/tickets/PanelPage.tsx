@@ -3,6 +3,8 @@ import { Download, KeyRound, Trash2 } from 'lucide-react';
 import { errorMessage, supabase } from '../../lib/tickets';
 import { downloadCsv, formatDateTime } from '../../lib/csv';
 import { StaffGate } from './StaffGate';
+import { BulkCompanies } from './BulkCompanies';
+import { AttendeesTable } from './AttendeesTable';
 import {
   ERROR_TEXT, GOLD, RULE, SURFACE, TEXT_MUTED, TEXT_SUBTLE, TextField, TicketShell,
   focusRing, primaryButton, secondaryButton,
@@ -159,6 +161,16 @@ function Panel() {
               Agregar empresa
             </button>
           </form>
+
+          <div className="md:col-span-2">
+            <BulkCompanies
+              onDone={(message) => {
+                setActionError('');
+                setNotice(message);
+                load();
+              }}
+            />
+          </div>
         </section>
 
         <section aria-labelledby="companies-title" className="rounded-2xl border overflow-hidden" style={{ backgroundColor: SURFACE, borderColor: RULE }}>
@@ -200,6 +212,8 @@ function Panel() {
             </div>
           )}
         </section>
+
+        <AttendeesTable attendees={data.attendees} />
       </div>
     </TicketShell>
   );
