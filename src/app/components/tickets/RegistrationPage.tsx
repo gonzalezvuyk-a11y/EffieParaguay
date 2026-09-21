@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react';
-import { CalendarDays, Clock, MapPin, Ticket } from 'lucide-react';
+import { CalendarDays, Clock, Mail, MapPin, Ticket, TriangleAlert } from 'lucide-react';
 import { DotsPattern } from '../DotsPattern';
 import {
   EVENT,
@@ -11,11 +11,13 @@ import {
   supabase,
   type AttendeeInput,
 } from '../../lib/tickets';
-import { TextField, focusRing, GOLD, SURFACE, RULE, TEXT_MUTED, TEXT_SUBTLE } from './ticketUi';
+import { TextField, focusRing, GOLD, SURFACE, RULE, TEXT_MUTED, TEXT_SUBTLE, primaryButton } from './ticketUi';
 
 type Step =
   | { name: 'code' }
-  | { name: 'details'; code: string; companyName: string };
+  | { name: 'details'; code: string; companyName: string }
+  | { name: 'sent'; firstName: string; email: string }
+  | { name: 'sent-error'; token: string };
 
 const EMPTY_ATTENDEE: AttendeeInput = {
   firstName: '',
@@ -73,11 +75,21 @@ export function RegistrationPage() {
       setError(errorMessage(rpcError ?? new Error('unknown')));
       return;
     }
-    supabase.functions.invoke('send-ticket', { body: { token } }).catch(() => undefined);
-    window.location.assign(`/entradas/ticket?t=${token}&nueva=1`);
+
+    const { data: sendResult, error: sendError } = await supabase.functions.invoke<{ sent: boolean }>(
+      'send-ticket',
+      { body: { token } }
+    );
+    setIsBusy(false);
+
+    if (sendError || !sendResult?.sent) {
+      setStep({ name: 'sent-error', token });
+      return;
+    }
+    setStep({ name: 'sent', firstName: attendee.firstName, email: attendee.email });
   };
 
-  const isExonerated = step.name === 'details';
+  const isExonerated = step.name !== 'code';
 
   return (
     <main className="min-h-screen relative overflow-x-clip pt-36 pb-24" style={{ backgroundColor: '#0a0a0a' }}>
@@ -98,7 +110,7 @@ export function RegistrationPage() {
 
             <ol className="flex gap-3 mb-6 text-sm" aria-label="Pasos">
               {['Código', 'Tus datos', 'Entrada'].map((label, index) => {
-                const current = step.name === 'code' ? 0 : 1;
+                const current = step.name === 'code' ? 0 : step.name === 'details' ? 1 : 2;
                 return (
                   <li
                     key={label}
@@ -119,7 +131,39 @@ export function RegistrationPage() {
             </ol>
 
             <div className="rounded-2xl border p-5 md:p-8" style={{ backgroundColor: SURFACE, borderColor: RULE }}>
-              {step.name === 'code' ? (
+              {step.name === 'sent' ? (
+                <div role="status">
+                  <Mail className="w-9 h-9 mb-4" style={{ color: GOLD }} aria-hidden="true" />
+                  <h2 className="text-2xl mb-3" style={{ color: '#FFFFFF', fontWeight: 450 }}>
+                    ¡Listo, {step.firstName}!
+                  </h2>
+                  <p className="text-base leading-relaxed text-pretty" style={{ color: TEXT_MUTED }}>
+                    Te enviamos tu entrada con el código QR a{' '}
+                    <span style={{ color: '#FFFFFF' }}>{step.email}</span>. Mostrala en la puerta el{' '}
+                    {eventDateLabel} — si no la encontrás en la puerta, también podés decir tu nombre.
+                  </p>
+                  <p className="mt-4 text-sm" style={{ color: TEXT_SUBTLE }}>
+                    ¿No te llega? Revisá spam o promociones antes de escribirnos.
+                  </p>
+                </div>
+              ) : step.name === 'sent-error' ? (
+                <div role="alert">
+                  <TriangleAlert className="w-9 h-9 mb-4" style={{ color: '#F0A090' }} aria-hidden="true" />
+                  <h2 className="text-2xl mb-3" style={{ color: '#FFFFFF', fontWeight: 450 }}>
+                    Tu entrada quedó confirmada
+                  </h2>
+                  <p className="text-base leading-relaxed text-pretty mb-6" style={{ color: TEXT_MUTED }}>
+                    Pero no pudimos enviarte el correo con el QR. Podés verla acá mismo y guardarla o hacerle una captura.
+                  </p>
+                  <a
+                    href={`/entradas/ticket?t=${step.token}`}
+                    className={`inline-flex items-center ${primaryButton}`}
+                    style={{ backgroundColor: GOLD, color: '#000000' }}
+                  >
+                    Ver mi entrada
+                  </a>
+                </div>
+              ) : step.name === 'code' ? (
                 <form onSubmit={submitCode} noValidate>
                   <label htmlFor={codeId} className="block text-sm mb-2" style={{ color: TEXT_MUTED }}>
                     Código de invitación
