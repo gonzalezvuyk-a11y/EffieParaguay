@@ -112,7 +112,7 @@ export function Header() {
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden xl:flex min-w-0 items-center gap-1 lg:gap-2">
+          <div className="hidden xl:flex min-w-0 items-center gap-0.5 2xl:gap-1">
             {navItems.map((item, index) => {
               const active = isActive(item.sectionId);
               const textColor = scrolled && isLightSection 
@@ -127,7 +127,7 @@ export function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
-                  className="relative px-2.5 py-2 text-sm tracking-wide whitespace-nowrap group lg:px-4"
+                  className="relative px-2 py-2 text-sm tracking-wide whitespace-nowrap group 2xl:px-3"
                   style={{ color: textColor }}
                 >
                   <span className="relative z-10">{item.label}</span>
@@ -150,7 +150,7 @@ export function Header() {
               href="/entradas"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="ml-4 px-6 py-2 rounded-full font-medium transition-all"
+              className="ml-2 shrink-0 px-5 py-2 rounded-full font-medium transition-all whitespace-nowrap"
               style={{ backgroundColor: '#B89650', color: '#000000' }}
             >
               Entradas
