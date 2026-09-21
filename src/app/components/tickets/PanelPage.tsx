@@ -6,6 +6,7 @@ import { StaffGate } from './StaffGate';
 import { BulkCompanies } from './BulkCompanies';
 import { AttendeesTable } from './AttendeesTable';
 import { CompanyDetail } from './CompanyDetail';
+import { UsersManager } from './UsersManager';
 import {
   ERROR_TEXT, GOLD, RULE, SURFACE, TEXT_MUTED, TEXT_SUBTLE, TextField, TicketShell,
   focusRing, primaryButton, secondaryButton,
@@ -20,10 +21,14 @@ type Attendee = {
 type PanelData = { capacity: number; companies: Company[]; codes: Code[]; attendees: Attendee[] };
 
 export function PanelPage() {
-  return <StaffGate title="Panel de entradas">{() => <Panel />}</StaffGate>;
+  return (
+    <StaffGate title="Panel de entradas" requireRole="admin" redirectHint="Andá a /entradas/puerta para marcar ingresos.">
+      {({ session }) => <Panel currentEmail={session.user.email ?? ''} />}
+    </StaffGate>
+  );
 }
 
-function Panel() {
+function Panel({ currentEmail }: { currentEmail: string }) {
   const [data, setData] = useState<PanelData | null>(null);
   const [loadError, setLoadError] = useState('');
   const [actionError, setActionError] = useState('');
@@ -236,6 +241,8 @@ function Panel() {
         </section>
 
         <AttendeesTable attendees={data.attendees} />
+
+        <UsersManager currentEmail={currentEmail} />
       </div>
     </TicketShell>
   );

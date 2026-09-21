@@ -21,12 +21,14 @@ const RegistrationPage = lazy(() => import('./components/tickets/RegistrationPag
 const TicketPage = lazy(() => import('./components/tickets/TicketPage').then((m) => ({ default: m.TicketPage })));
 const PanelPage = lazy(() => import('./components/tickets/PanelPage').then((m) => ({ default: m.PanelPage })));
 const DoorPage = lazy(() => import('./components/tickets/DoorPage').then((m) => ({ default: m.DoorPage })));
+const SetPasswordPage = lazy(() => import('./components/tickets/SetPasswordPage').then((m) => ({ default: m.SetPasswordPage })));
 
 const TICKET_ROUTES: Record<string, React.ComponentType> = {
   '/entradas': RegistrationPage,
   '/entradas/ticket': TicketPage,
   '/entradas/panel': PanelPage,
   '/entradas/puerta': DoorPage,
+  '/entradas/set-password': SetPasswordPage,
 };
 
 export default function App() {
