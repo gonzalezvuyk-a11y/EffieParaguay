@@ -23,7 +23,7 @@ export const finalists: Finalist[] = [
   { category: 'Promociones', brand: 'Combustible Petrobras', caseName: 'Promo Petrobras Rally', agency: 'Biedermann' },
   { category: 'Productos', brand: 'Cortagrip', caseName: 'Escuadrón de Abuelas', agency: 'Biedermann' },
   { category: 'Productos o Servicios Financieros', brand: 'Fortaleza', caseName: 'Referentes', agency: 'Wild Fi' },
-  { category: 'Éxito Sostenido', brand: 'Corona', caseName: 'Plataforma Casa Corona Verano', agency: 'Oniria TBWA' },
+  { category: 'Éxito Sostenido', brand: 'Corona', caseName: 'Plataforma Casa Corona Verano', agency: 'Oniria TBWA - Paru' },
   { category: 'Éxito Sostenido', brand: 'Shell', caseName: 'Volvimos, Volveremos', agency: 'Oniria TBWA' },
   { category: 'Cambio Positivo - Bien Social', brand: 'Fundación Itaú', caseName: 'Art Daily', agency: 'Nasta' },
   { category: 'Retail', brand: 'Combustible Petrobras', caseName: 'Circuito Petrobras Rally', agency: 'Biedermann' },
