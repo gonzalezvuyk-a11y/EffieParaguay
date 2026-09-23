@@ -26,6 +26,10 @@ const slugify = (value: string) =>
 
 const caseKey = (item: Finalist) => `${item.brand}|${item.caseName}`;
 
+// "Oniria TBWA - Paru" credits a collaborator on the case but isn't a distinct
+// agency, so filtering/grouping use only the part before " - ".
+const primaryAgency = (value: string) => value.split(' - ')[0].trim();
+
 const groupByCategory = (items: Finalist[]) => {
   const groups = new Map<string, Finalist[]>();
   for (const item of items) {
@@ -41,7 +45,7 @@ const groupByCategory = (items: Finalist[]) => {
 };
 
 const allGroups = groupByCategory(finalists);
-const agencies = [...new Set(finalists.map((f) => f.agency))].sort(collator.compare);
+const agencies = [...new Set(finalists.map((f) => primaryAgency(f.agency)))].sort(collator.compare);
 
 const categoriesByCase = finalists.reduce((map, item) => {
   map.set(caseKey(item), [...(map.get(caseKey(item)) ?? []), item.category]);
@@ -69,7 +73,7 @@ export function FinalistsPage() {
   const groups = useMemo(() => {
     const term = normalize(deferredQuery.trim());
     const filtered = finalists.filter((f) => {
-      if (agency && f.agency !== agency) return false;
+      if (agency && primaryAgency(f.agency) !== agency) return false;
       if (!term) return true;
       return normalize(`${f.category} ${f.brand} ${f.caseName} ${f.agency}`).includes(term);
     });
@@ -415,12 +419,12 @@ export function FinalistsPage() {
                             </p>
                             <p className="text-sm min-w-0">
                               <span className="md:sr-only" style={{ color: TEXT_SUBTLE }}>Agencia: </span>
-                              {agency === entry.agency ? (
+                              {agency === primaryAgency(entry.agency) ? (
                                 <span translate="no" style={{ color: GOLD }}>{entry.agency}</span>
                               ) : (
                                 <button
                                   type="button"
-                                  onClick={() => filterByAgency(entry.agency)}
+                                  onClick={() => filterByAgency(primaryAgency(entry.agency))}
                                   className={`-my-2 inline-flex min-h-11 items-center rounded text-left underline decoration-transparent underline-offset-4 transition-colors touch-manipulation hover:decoration-[#B89650] hover:text-white ${focusRing}`}
                                   style={{ color: GOLD }}
                                 >
