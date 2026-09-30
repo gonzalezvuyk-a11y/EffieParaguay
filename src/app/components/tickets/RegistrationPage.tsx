@@ -30,7 +30,7 @@ const EMPTY_ATTENDEE: AttendeeInput = {
 
 export function RegistrationPage() {
   const [step, setStep] = useState<Step>({ name: 'code' });
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(() => formatCode(new URLSearchParams(window.location.search).get('codigo') ?? ''));
   const [attendee, setAttendee] = useState<AttendeeInput>(EMPTY_ATTENDEE);
   const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState('');
