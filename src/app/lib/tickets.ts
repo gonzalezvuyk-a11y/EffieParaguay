@@ -9,7 +9,7 @@ export const EVENT = {
   name: 'Premiación Effie Paraguay 2026',
   venue: 'Rogelio',
   mapsUrl: 'https://maps.app.goo.gl/qbLeoBBtPc6juBQLA',
-  date: new Date(2026, 9, 15, 20, 0),
+  date: new Date(2026, 9, 15, 19, 30),
   priceUsd: 100,
 };
 

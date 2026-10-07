@@ -40,7 +40,7 @@ export function TicketsSection() {
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 mb-10 text-sm" style={{ color: '#999999' }}>
             <span className="flex items-center gap-2">
               <CalendarDays className="w-4 h-4" style={{ color: GOLD }} aria-hidden="true" />
-              Jueves 15 de octubre · 20:00 h
+              Jueves 15 de octubre · 19:30 h
             </span>
             <span className="flex items-center gap-2">
               <MapPin className="w-4 h-4" style={{ color: GOLD }} aria-hidden="true" />
