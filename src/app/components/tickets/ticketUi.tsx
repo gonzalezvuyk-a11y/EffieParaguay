@@ -25,6 +25,7 @@ type TextFieldProps = {
   placeholder?: string;
   hint?: string;
   required?: boolean;
+  invalid?: boolean;
 };
 
 /** Labeled input with optional hint, styled for the dark ticketing screens. */
@@ -39,6 +40,7 @@ export function TextField({
   placeholder,
   hint,
   required = true,
+  invalid = false,
 }: TextFieldProps) {
   const id = useId();
   const hintId = useId();
@@ -58,9 +60,10 @@ export function TextField({
         placeholder={placeholder}
         required={required}
         spellCheck={type === 'email' ? false : undefined}
+        aria-invalid={invalid || undefined}
         aria-describedby={hint ? hintId : undefined}
         className={`w-full min-h-11 rounded-lg border px-3 text-base bg-transparent placeholder:text-[#777777] transition-colors hover:border-[#555555] ${focusRing}`}
-        style={{ borderColor: '#333333', color: '#FFFFFF' }}
+        style={{ borderColor: invalid ? ERROR_TEXT : '#333333', color: '#FFFFFF' }}
       />
       {hint && (
         <p id={hintId} className="mt-1.5 text-xs" style={{ color: TEXT_SUBTLE }}>

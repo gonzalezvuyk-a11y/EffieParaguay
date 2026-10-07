@@ -28,18 +28,49 @@ const EMPTY_ATTENDEE: AttendeeInput = {
   phone: '',
 };
 
+const FIELD_LABELS: Record<keyof AttendeeInput, string> = {
+  firstName: 'Nombre',
+  lastName: 'Apellido',
+  email: 'Correo',
+  phone: 'Celular',
+  company: 'Empresa',
+  jobTitle: 'Cargo',
+};
+
+// Mirrors the checks in the register_attendee RPC so people see which field to fix.
+const findInvalidFields = (attendee: AttendeeInput) => {
+  const phoneDigits = attendee.phone.replace(/\D/g, '').length;
+  const checks: Array<[keyof AttendeeInput, boolean]> = [
+    ['firstName', attendee.firstName.trim() !== ''],
+    ['lastName', attendee.lastName.trim() !== ''],
+    ['email', /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(attendee.email.trim())],
+    ['phone', phoneDigits >= 6 && phoneDigits <= 15],
+    ['company', attendee.company.trim() !== ''],
+    ['jobTitle', attendee.jobTitle.trim() !== ''],
+  ];
+  return checks.filter(([, isValid]) => !isValid).map(([field]) => field);
+};
+
 export function RegistrationPage() {
   const [step, setStep] = useState<Step>({ name: 'code' });
   const [code, setCode] = useState(() => formatCode(new URLSearchParams(window.location.search).get('codigo') ?? ''));
   const [attendee, setAttendee] = useState<AttendeeInput>(EMPTY_ATTENDEE);
   const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState('');
+  const [invalidFields, setInvalidFields] = useState<ReadonlySet<keyof AttendeeInput>>(new Set());
   const codeId = useId();
   const codeErrorId = useId();
   const formErrorId = useId();
 
-  const updateField = (field: keyof AttendeeInput) => (value: string) =>
+  const updateField = (field: keyof AttendeeInput) => (value: string) => {
     setAttendee((current) => ({ ...current, [field]: value }));
+    setInvalidFields((current) => {
+      if (!current.has(field)) return current;
+      const next = new Set(current);
+      next.delete(field);
+      return next;
+    });
+  };
 
   const submitCode = async (event: FormEvent) => {
     event.preventDefault();
@@ -59,6 +90,12 @@ export function RegistrationPage() {
   const submitDetails = async (event: FormEvent) => {
     event.preventDefault();
     if (step.name !== 'details') return;
+    const problems = findInvalidFields(attendee);
+    if (problems.length > 0) {
+      setInvalidFields(new Set(problems));
+      setError(`Revisá estos campos: ${problems.map((field) => FIELD_LABELS[field]).join(', ')}.`);
+      return;
+    }
     setError('');
     setIsBusy(true);
     const { data: token, error: rpcError } = await supabase.rpc('register_attendee', {
@@ -214,12 +251,12 @@ export function RegistrationPage() {
                     </button>
                   </p>
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <TextField label="Nombre" name="nombre" autoComplete="given-name" value={attendee.firstName} onChange={updateField('firstName')} />
-                    <TextField label="Apellido" name="apellido" autoComplete="family-name" value={attendee.lastName} onChange={updateField('lastName')} />
-                    <TextField label="Correo" name="correo" type="email" autoComplete="email" value={attendee.email} onChange={updateField('email')} hint="Te enviamos la entrada a este correo." />
-                    <TextField label="Celular" name="celular" type="tel" autoComplete="tel" inputMode="tel" value={attendee.phone} onChange={updateField('phone')} placeholder="0981 123456" />
-                    <TextField label="Empresa" name="empresa" autoComplete="organization" value={attendee.company} onChange={updateField('company')} />
-                    <TextField label="Cargo" name="cargo" autoComplete="organization-title" value={attendee.jobTitle} onChange={updateField('jobTitle')} />
+                    <TextField label="Nombre" name="nombre" autoComplete="given-name" value={attendee.firstName} onChange={updateField('firstName')} invalid={invalidFields.has('firstName')} />
+                    <TextField label="Apellido" name="apellido" autoComplete="family-name" value={attendee.lastName} onChange={updateField('lastName')} invalid={invalidFields.has('lastName')} />
+                    <TextField label="Correo" name="correo" type="email" autoComplete="email" value={attendee.email} onChange={updateField('email')} invalid={invalidFields.has('email')} hint="Te enviamos la entrada a este correo." />
+                    <TextField label="Celular" name="celular" type="tel" autoComplete="tel" inputMode="tel" value={attendee.phone} onChange={updateField('phone')} invalid={invalidFields.has('phone')} placeholder="Ej: 0981 123456" />
+                    <TextField label="Empresa" name="empresa" autoComplete="organization" value={attendee.company} onChange={updateField('company')} invalid={invalidFields.has('company')} />
+                    <TextField label="Cargo" name="cargo" autoComplete="organization-title" value={attendee.jobTitle} onChange={updateField('jobTitle')} invalid={invalidFields.has('jobTitle')} placeholder="Ej: Directora creativa" hint="Tu puesto en la empresa." />
                   </div>
                   {error && (
                     <p id={formErrorId} role="alert" className="mt-4 text-sm" style={{ color: '#F0A090' }}>
