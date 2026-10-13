@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Star } from 'lucide-react';
-import logoICON from '../../assets/logoicon.png';
+import logoIndustriasCreativas from '../../assets/industrias-creativas-apilado-blanco.svg';
 import logoGuarani from '../../assets/guarani-films.png';
 import logoPressencia from '../../assets/pressencia.png';
 import logoBunkerDb from '../../assets/bunker-db.png';
@@ -40,7 +40,7 @@ export function IconSponsorSection() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
             {[
-              { logo: logoICON, alt: 'ICON', href: 'https://iconlat.com/', logoClassName: 'h-10 max-w-28' },
+              { logo: logoIndustriasCreativas, alt: 'Industrias Creativas', href: 'https://industriascreativas.com/', logoClassName: 'h-12 max-w-28' },
               { logo: logoGuarani, alt: 'Guarani Films', href: 'https://www.guaranifilms.com/', logoClassName: 'h-12 max-w-32' },
               { logo: logoPressencia, alt: 'Pressencia Comunicación', href: 'https://www.pressencia.com.py/', logoClassName: 'h-10 max-w-36' },
               { logo: logoBunkerDb, alt: 'Bunker DB', href: 'https://bunkerdb.com/en', logoClassName: 'h-10 max-w-36 filter brightness-0 invert' },

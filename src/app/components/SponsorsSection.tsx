@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import logoCAP from '../../assets/afbae2e05d7d5a9d4ce1542fd1d7cc0f7920b429.png';
 import logoFAC from '../../assets/579f03a2d91524519d73697d5d47e5960f44bdbc.png';
 import logoEletrcub from '../../assets/94c36a98462ef404415ed858ab26a2905e7eb883.png';
-import logoICON from '../../assets/62e24a5913cfd512c8c297f256a814697e9a3045.png';
+import logoIndustriasCreativas from '../../assets/industrias-creativas-apilado-blanco.svg';
 import logoCerneco from '../../assets/cerneco.png';
 import logoClubEjecutivos from '../../assets/club-de-ejecutivos.png';
 import { DotsPattern } from './DotsPattern';
@@ -105,7 +105,7 @@ export function SponsorsSection() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
             {[
               { logo: logoCerneco, name: 'Cerneco', alt: 'Cerneco', href: 'https://www.cerneco.org.py/', invert: false },
-              { logo: logoICON, name: 'ICON', alt: 'ICON', href: 'https://iconlat.com/', invert: false },
+              { logo: logoIndustriasCreativas, name: 'Industrias Creativas', alt: 'Industrias Creativas', href: 'https://industriascreativas.com/', invert: false },
               { logo: logoEletrcub, name: 'CAP', alt: 'Consejo Argentino de Publicidad', href: 'https://revistacap.com.py/', invert: false },
               { logo: logoCAP, name: 'El Círculo', alt: 'El Círculo', href: 'https://elcirculo.org.py/', invert: true },
               { logo: logoFAC, name: 'FIC', alt: 'Federación de Industrias Creativas', href: 'https://fic.org.py/', invert: true },

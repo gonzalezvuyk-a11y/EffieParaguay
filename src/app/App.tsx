@@ -142,7 +142,7 @@ export default function App() {
           <SectionDivider />
           <OrganizationSection />
           <SectionDivider />
-          {/* Auspiciantes - ICON */}
+          {/* Auspiciantes - Industrias Creativas */}
           <IconSponsorSection />
           <SectionDivider />
           <SponsorsSection />
