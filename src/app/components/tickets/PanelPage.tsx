@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useState, type FormEvent } from 'react';
 import { ChevronDown, Download, KeyRound, Trash2 } from 'lucide-react';
-import { errorMessage, supabase } from '../../lib/tickets';
+import { deleteExpectingRows, errorMessage, supabase } from '../../lib/tickets';
 import { downloadCsv, formatDateTime } from '../../lib/csv';
 import { StaffGate } from './StaffGate';
 import { BulkCompanies } from './BulkCompanies';
@@ -68,6 +68,7 @@ function Panel({ currentEmail }: { currentEmail: string }) {
     setBusyKey('');
     if (error) {
       setActionError(errorMessage(new Error(error.message)));
+      if (error.message.includes('NOT_DELETED')) await load();
       return false;
     }
     setNotice(success);
@@ -215,7 +216,7 @@ function Panel({ currentEmail }: { currentEmail: string }) {
                           onExport={() => exportCodes(company)}
                           onDelete={() => {
                             if (window.confirm(`¿Eliminar ${company.name} y sus códigos sin usar? No se puede deshacer.`)) {
-                              run(`del-${company.id}`, () => supabase.from('companies').delete().eq('id', company.id), `${company.name} eliminada.`);
+                              run(`del-${company.id}`, () => deleteExpectingRows(supabase.from('companies').delete().eq('id', company.id).select('id')), `${company.name} eliminada.`);
                             }
                           }}
                         />

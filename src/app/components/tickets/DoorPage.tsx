@@ -5,7 +5,7 @@ import { errorMessage, supabase } from '../../lib/tickets';
 import { StaffGate } from './StaffGate';
 import { ERROR_TEXT, GOLD, RULE, SURFACE, TEXT_MUTED, TEXT_SUBTLE, TicketShell, focusRing, primaryButton, secondaryButton } from './ticketUi';
 
-type Attendee = { id: string; first_name: string; last_name: string; company: string; email: string; phone: string; checked_in_at: string | null };
+type Attendee = { id: string; first_name: string; last_name: string; company: string; checked_in_at: string | null };
 type Feedback = { tone: 'ok' | 'warn' | 'error'; message: string };
 
 const REFRESH_MS = 15000;
@@ -30,16 +30,13 @@ function Door() {
   const lastScanRef = useRef('');
 
   const load = useCallback(async () => {
-    const { data, error } = await supabase
-      .from('attendees')
-      .select('id, first_name, last_name, company, email, phone, checked_in_at')
-      .order('last_name');
+    const { data, error } = await supabase.rpc('door_attendees');
     if (error) {
       setLoadError(errorMessage(error));
       return;
     }
     setLoadError('');
-    setAttendees(data);
+    setAttendees((data ?? []) as Attendee[]);
   }, []);
 
   useEffect(() => {
@@ -117,7 +114,7 @@ function Door() {
     const term = normalize(deferredQuery.trim());
     if (!attendees || term.length < 2) return [];
     return attendees
-      .filter((a) => normalize(`${a.first_name} ${a.last_name} ${a.company} ${a.email} ${a.phone}`).includes(term))
+      .filter((a) => normalize(`${a.first_name} ${a.last_name} ${a.company}`).includes(term))
       .slice(0, 30);
   }, [attendees, deferredQuery]);
 
@@ -160,7 +157,7 @@ function Door() {
         </div>
 
         <div>
-          <label htmlFor={searchId} className="block text-sm mb-2" style={{ color: TEXT_MUTED }}>Buscar por nombre, apellido, empresa o celular</label>
+          <label htmlFor={searchId} className="block text-sm mb-2" style={{ color: TEXT_MUTED }}>Buscar por nombre, apellido o empresa</label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none" style={{ color: TEXT_SUBTLE }} aria-hidden="true" />
             <input

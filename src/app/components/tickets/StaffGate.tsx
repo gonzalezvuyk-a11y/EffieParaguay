@@ -9,6 +9,7 @@ type GateState =
   | { status: 'loading' }
   | { status: 'signed-out' }
   | { status: 'no-access'; email: string }
+  | { status: 'role-error' }
   | { status: 'wrong-role'; role: StaffRole }
   | { status: 'ready'; session: Session; role: StaffRole };
 
@@ -20,16 +21,22 @@ type StaffGateProps = {
   children: (context: { session: Session; role: StaffRole }) => ReactNode;
 };
 
-const fetchRole = async (): Promise<StaffRole | null> => {
-  const { data } = await supabase.rpc('my_staff_role');
-  const role = Array.isArray(data) ? data[0]?.role : undefined;
-  return role === 'admin' || role === 'door' ? role : null;
+const fetchRole = async (): Promise<StaffRole | null | 'error'> => {
+  try {
+    const { data, error } = await supabase.rpc('my_staff_role');
+    if (error) return 'error';
+    const role = Array.isArray(data) ? data[0]?.role : undefined;
+    return role === 'admin' || role === 'door' ? role : null;
+  } catch {
+    return 'error';
+  }
 };
 
 /** Renders children only for signed-in staff, optionally restricted to one role. */
 export function StaffGate({ title, requireRole, redirectHint, children }: StaffGateProps) {
   const [state, setState] = useState<GateState>({ status: 'loading' });
   const [showLinkFallback, setShowLinkFallback] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     document.title = `${title} | Effie Paraguay`;
@@ -40,6 +47,11 @@ export function StaffGate({ title, requireRole, redirectHint, children }: StaffG
         return;
       }
       const role = await fetchRole();
+      if (role === 'error') {
+        // A network blip must not drop a signed-in staff member out of a working screen.
+        setState((current) => (current.status === 'ready' ? current : { status: 'role-error' }));
+        return;
+      }
       if (!role) {
         setState({ status: 'no-access', email: session.user.email ?? '' });
         return;
@@ -56,7 +68,7 @@ export function StaffGate({ title, requireRole, redirectHint, children }: StaffG
       resolve(session);
     });
     return () => listener.subscription.unsubscribe();
-  }, [title, requireRole]);
+  }, [title, requireRole, retryKey]);
 
   if (state.status === 'ready') return <>{children({ session: state.session, role: state.role })}</>;
 
@@ -66,6 +78,22 @@ export function StaffGate({ title, requireRole, redirectHint, children }: StaffG
         <h1 className="text-2xl mb-2" style={{ color: '#FFFFFF', fontWeight: 450 }}>{title}</h1>
 
         {state.status === 'loading' && <p aria-busy="true" style={{ color: TEXT_MUTED }}>Verificando sesión…</p>}
+
+        {state.status === 'role-error' && (
+          <>
+            <p role="alert" className="text-sm mb-6" style={{ color: ERROR_TEXT }}>
+              No pudimos verificar tu acceso. Revisá tu conexión e intentá de nuevo.
+            </p>
+            <button
+              type="button"
+              onClick={() => { setState({ status: 'loading' }); setRetryKey((key) => key + 1); }}
+              className={primaryButton}
+              style={{ backgroundColor: GOLD, color: '#000000' }}
+            >
+              Reintentar
+            </button>
+          </>
+        )}
 
         {state.status === 'no-access' && (
           <>

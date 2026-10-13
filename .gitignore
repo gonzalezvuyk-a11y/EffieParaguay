@@ -12,3 +12,6 @@ dist
 
 # Supabase CLI cache
 supabase/.temp
+
+# Security review working files (may contain findings; repo is public)
+.security-review/

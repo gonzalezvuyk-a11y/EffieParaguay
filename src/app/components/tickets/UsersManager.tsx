@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useState, type FormEvent } from 'react';
 import { Trash2 } from 'lucide-react';
-import { errorMessage, supabase } from '../../lib/tickets';
+import { deleteExpectingRows, errorMessage, supabase } from '../../lib/tickets';
 import { ERROR_TEXT, GOLD, RULE, SURFACE, TEXT_MUTED, TEXT_SUBTLE, TextField, focusRing, primaryButton, secondaryButton } from './ticketUi';
 
 type StaffMember = { email: string; role: 'admin' | 'door' };
@@ -62,10 +62,11 @@ export function UsersManager({ currentEmail }: UsersManagerProps) {
     setBusyKey(`del-${target}`);
     setActionError('');
     setNotice('');
-    const { error } = await supabase.from('staff').delete().eq('email', target);
+    const { error } = await deleteExpectingRows(supabase.from('staff').delete().eq('email', target).select('email'));
     setBusyKey('');
     if (error) {
-      setActionError(errorMessage(error));
+      setActionError(errorMessage(new Error(error.message)));
+      load();
       return;
     }
     setNotice(`${target} ya no tiene acceso.`);

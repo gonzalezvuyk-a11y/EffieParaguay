@@ -59,6 +59,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   QUOTA_BELOW_CODES: 'El cupo no puede ser menor que la cantidad de códigos ya generados.',
   TICKET_NOT_FOUND: 'No encontramos esa entrada.',
   FORBIDDEN: 'Tu usuario no tiene permiso para esta acción.',
+  NOT_DELETED: 'No se pudo eliminar: ya cambió (alguien lo usó o lo borró). Actualizamos la lista.',
 };
 
 export const errorMessage = (error: PostgrestError | Error | null | undefined) => {
@@ -69,6 +70,39 @@ export const errorMessage = (error: PostgrestError | Error | null | undefined) =
     return 'Ya existe una empresa con ese nombre.';
   }
   return 'Algo falló al conectar. Revisá tu conexión e intentá de nuevo.';
+};
+
+export const FIELD_LABELS: Record<keyof AttendeeInput, string> = {
+  firstName: 'Nombre',
+  lastName: 'Apellido',
+  email: 'Correo',
+  phone: 'Celular',
+  company: 'Empresa',
+  jobTitle: 'Cargo',
+};
+
+// Mirrors the checks in the register_attendee RPC so people see which field to fix.
+export const findInvalidFields = (attendee: AttendeeInput) => {
+  const phoneDigits = attendee.phone.replace(/\D/g, '').length;
+  const checks: Array<[keyof AttendeeInput, boolean]> = [
+    ['firstName', attendee.firstName.trim() !== ''],
+    ['lastName', attendee.lastName.trim() !== ''],
+    ['email', /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(attendee.email.trim())],
+    ['phone', phoneDigits >= 6 && phoneDigits <= 15],
+    ['company', attendee.company.trim() !== ''],
+    ['jobTitle', attendee.jobTitle.trim() !== ''],
+  ];
+  return checks.filter(([, isValid]) => !isValid).map(([field]) => field);
+};
+
+// A delete blocked by RLS returns no error and zero rows; treat that as a failure.
+export const deleteExpectingRows = async (
+  query: PromiseLike<{ data: unknown[] | null; error: { message: string } | null }>
+) => {
+  const { data, error } = await query;
+  if (error) return { error };
+  if (!data || data.length === 0) return { error: { message: 'NOT_DELETED' } };
+  return { error: null };
 };
 
 export const formatCode = (value: string) => {

@@ -3,9 +3,11 @@ import { CalendarDays, Clock, Mail, MapPin, Shirt, Ticket, TriangleAlert } from 
 import { DotsPattern } from '../DotsPattern';
 import {
   EVENT,
+  FIELD_LABELS,
   errorMessage,
   eventDateLabel,
   eventTimeLabel,
+  findInvalidFields,
   formatCode,
   priceLabel,
   supabase,
@@ -26,29 +28,6 @@ const EMPTY_ATTENDEE: AttendeeInput = {
   company: '',
   jobTitle: '',
   phone: '',
-};
-
-const FIELD_LABELS: Record<keyof AttendeeInput, string> = {
-  firstName: 'Nombre',
-  lastName: 'Apellido',
-  email: 'Correo',
-  phone: 'Celular',
-  company: 'Empresa',
-  jobTitle: 'Cargo',
-};
-
-// Mirrors the checks in the register_attendee RPC so people see which field to fix.
-const findInvalidFields = (attendee: AttendeeInput) => {
-  const phoneDigits = attendee.phone.replace(/\D/g, '').length;
-  const checks: Array<[keyof AttendeeInput, boolean]> = [
-    ['firstName', attendee.firstName.trim() !== ''],
-    ['lastName', attendee.lastName.trim() !== ''],
-    ['email', /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(attendee.email.trim())],
-    ['phone', phoneDigits >= 6 && phoneDigits <= 15],
-    ['company', attendee.company.trim() !== ''],
-    ['jobTitle', attendee.jobTitle.trim() !== ''],
-  ];
-  return checks.filter(([, isValid]) => !isValid).map(([field]) => field);
 };
 
 export function RegistrationPage() {

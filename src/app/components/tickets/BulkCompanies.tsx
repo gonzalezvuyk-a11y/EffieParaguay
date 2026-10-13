@@ -6,8 +6,9 @@ type ParsedRow = { name: string; quota: number };
 
 /** Parses "Empresa, cupo" lines (comma, semicolon or tab separated). */
 const parseRows = (text: string) => {
-  const rows: ParsedRow[] = [];
+  const byName = new Map<string, number>();
   const invalid: string[] = [];
+  let duplicates = 0;
   for (const rawLine of text.split('\n')) {
     const line = rawLine.trim();
     if (!line) continue;
@@ -18,9 +19,11 @@ const parseRows = (text: string) => {
       invalid.push(line);
       continue;
     }
-    rows.push({ name, quota });
+    if (byName.has(name)) duplicates += 1;
+    byName.set(name, quota);
   }
-  return { rows, invalid };
+  const rows: ParsedRow[] = [...byName].map(([name, quota]) => ({ name, quota }));
+  return { rows, invalid, duplicates };
 };
 
 type BulkCompaniesProps = {
@@ -35,7 +38,7 @@ export function BulkCompanies({ onDone }: BulkCompaniesProps) {
   const fieldId = useId();
   const hintId = useId();
 
-  const { rows, invalid } = parseRows(text);
+  const { rows, invalid, duplicates } = parseRows(text);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -82,6 +85,11 @@ export function BulkCompanies({ onDone }: BulkCompaniesProps) {
         {rows.length > 0 && (
           <p style={{ color: GOLD }} className="tabular-nums">
             {rows.length} {rows.length === 1 ? 'empresa' : 'empresas'} · {rows.reduce((total, row) => total + row.quota, 0)} cupos
+          </p>
+        )}
+        {duplicates > 0 && (
+          <p style={{ color: TEXT_MUTED }}>
+            {duplicates === 1 ? 'Una empresa está repetida' : `${duplicates} empresas están repetidas`}: se usa el último cupo de cada una.
           </p>
         )}
         {invalid.length > 0 && (

@@ -71,23 +71,32 @@ Deno.serve(async (req) => {
 <p style="margin:24px 0 0;font-size:13px;line-height:1.6;color:#999999">En la puerta mostrá este QR (si no se ve la imagen, tocá el botón de arriba) o decí tu nombre.</p>
 </td></tr></table></td></tr></table></body></html>`;
 
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from,
-      to: attendee.email,
-      subject: "Tu entrada para la Premiación Effie Paraguay 2026",
-      html,
-      text: `Hola ${attendee.first_name}, tu entrada está confirmada. Jueves 15 de octubre, 19:30 h, Rogelio. Dress code: Business casual. Ver entrada con tu QR: ${link}`,
-    }),
-  });
+  const releaseForRetry = () => admin.from("attendees").update({ email_sent_at: null }).eq("ticket_token", token);
+
+  let response: Response;
+  try {
+    response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from,
+        to: attendee.email,
+        subject: "Tu entrada para la Premiación Effie Paraguay 2026",
+        html,
+        text: `Hola ${attendee.first_name}, tu entrada está confirmada. Jueves 15 de octubre, 19:30 h, Rogelio. Dress code: Business casual. Ver entrada con tu QR: ${link}`,
+      }),
+    });
+  } catch (fetchError) {
+    await releaseForRetry();
+    console.error("resend_unreachable", String(fetchError));
+    return json({ sent: false, reason: "provider_unreachable" }, 502);
+  }
 
   if (!response.ok) {
-    await admin.from("attendees").update({ email_sent_at: null }).eq("ticket_token", token);
+    await releaseForRetry();
     const detail = await response.text().catch(() => "");
     console.error("resend_error", response.status, detail);
-    return json({ sent: false, reason: "provider_error", status: response.status, detail }, 502);
+    return json({ sent: false, reason: "provider_error" }, 502);
   }
 
   return json({ sent: true });

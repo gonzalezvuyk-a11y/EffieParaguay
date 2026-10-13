@@ -1,6 +1,13 @@
 import { useId, useState, type FormEvent } from 'react';
 import { LogIn, RotateCcw, Trash2, UserPlus } from 'lucide-react';
-import { errorMessage, supabase, type AttendeeInput } from '../../lib/tickets';
+import {
+  FIELD_LABELS,
+  deleteExpectingRows,
+  errorMessage,
+  findInvalidFields,
+  supabase,
+  type AttendeeInput,
+} from '../../lib/tickets';
 import { formatDateTime } from '../../lib/csv';
 import { ERROR_TEXT, GOLD, RULE, TEXT_MUTED, TEXT_SUBTLE, TextField, focusRing, primaryButton } from './ticketUi';
 
@@ -25,6 +32,7 @@ export function CompanyDetail({ companyName, codes, attendees, onChange }: Compa
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [attendee, setAttendee] = useState<AttendeeInput>({ ...EMPTY_ATTENDEE, company: companyName });
+  const [invalidFields, setInvalidFields] = useState<ReadonlySet<keyof AttendeeInput>>(new Set());
   const formId = useId();
 
   const nextCode = codes.find((c) => !c.redeemed_at)?.code;
@@ -37,6 +45,7 @@ export function CompanyDetail({ companyName, codes, attendees, onChange }: Compa
     setBusyKey('');
     if (actionError) {
       setError(errorMessage(new Error(actionError.message)));
+      if (actionError.message.includes('NOT_DELETED')) onChange();
       return;
     }
     setNotice(success);
@@ -46,10 +55,17 @@ export function CompanyDetail({ companyName, codes, attendees, onChange }: Compa
   const addAttendee = async (event: FormEvent) => {
     event.preventDefault();
     if (!nextCode) return;
+    const problems = findInvalidFields(attendee);
+    if (problems.length > 0) {
+      setInvalidFields(new Set(problems));
+      setError(`Revisá estos campos: ${problems.map((field) => FIELD_LABELS[field]).join(', ')}.`);
+      setNotice('');
+      return;
+    }
     setBusyKey('add-attendee');
     setError('');
     setNotice('');
-    const { error: rpcError } = await supabase.rpc('register_attendee', {
+    const { data: token, error: rpcError } = await supabase.rpc('register_attendee', {
       p_code: nextCode,
       p_first_name: attendee.firstName,
       p_last_name: attendee.lastName,
@@ -58,18 +74,36 @@ export function CompanyDetail({ companyName, codes, attendees, onChange }: Compa
       p_job_title: attendee.jobTitle,
       p_phone: attendee.phone,
     });
-    setBusyKey('');
-    if (rpcError) {
-      setError(errorMessage(rpcError));
+    if (rpcError || typeof token !== 'string') {
+      setBusyKey('');
+      setError(errorMessage(rpcError ?? new Error('unknown')));
       return;
     }
-    setNotice(`${attendee.firstName} agregado con el código ${nextCode}.`);
+    const { data: sendResult, error: sendError } = await supabase.functions.invoke<{ sent: boolean }>(
+      'send-ticket',
+      { body: { token } }
+    );
+    setBusyKey('');
+    const emailSent = !sendError && sendResult?.sent === true;
+    setNotice(
+      emailSent
+        ? `${attendee.firstName} agregado con el código ${nextCode}. Le enviamos la entrada por correo.`
+        : `${attendee.firstName} agregado con el código ${nextCode}, pero no pudimos enviarle el correo. Revisá la dirección o pasale el link de su entrada.`
+    );
     setAttendee({ ...EMPTY_ATTENDEE, company: companyName });
+    setInvalidFields(new Set());
     onChange();
   };
 
-  const updateField = (field: keyof AttendeeInput) => (value: string) =>
+  const updateField = (field: keyof AttendeeInput) => (value: string) => {
     setAttendee((current) => ({ ...current, [field]: value }));
+    setInvalidFields((current) => {
+      if (!current.has(field)) return current;
+      const next = new Set(current);
+      next.delete(field);
+      return next;
+    });
+  };
 
   return (
     <div className="p-5 space-y-6" style={{ backgroundColor: '#0d0d0d' }}>
@@ -103,7 +137,7 @@ export function CompanyDetail({ companyName, codes, attendees, onChange }: Compa
                         disabled={busyKey === `del-code-${c.code}`}
                         onClick={() => {
                           if (window.confirm(`¿Eliminar el código ${c.code}? No se puede deshacer.`)) {
-                            run(`del-code-${c.code}`, () => supabase.from('invitation_codes').delete().eq('code', c.code), `Código ${c.code} eliminado.`);
+                            run(`del-code-${c.code}`, () => deleteExpectingRows(supabase.from('invitation_codes').delete().eq('code', c.code).select('code')), `Código ${c.code} eliminado.`);
                           }
                         }}
                         className={`inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors hover:bg-white/5 ${focusRing}`}
@@ -188,12 +222,12 @@ export function CompanyDetail({ companyName, codes, attendees, onChange }: Compa
         </h3>
         {nextCode ? (
           <form onSubmit={addAttendee} className="grid gap-3 sm:grid-cols-2">
-            <TextField label="Nombre" name="nombre" autoComplete="given-name" value={attendee.firstName} onChange={updateField('firstName')} />
-            <TextField label="Apellido" name="apellido" autoComplete="family-name" value={attendee.lastName} onChange={updateField('lastName')} />
-            <TextField label="Correo" name="correo" type="email" autoComplete="email" value={attendee.email} onChange={updateField('email')} />
-            <TextField label="Celular" name="celular" type="tel" autoComplete="tel" inputMode="tel" value={attendee.phone} onChange={updateField('phone')} placeholder="0981 123456" />
-            <TextField label="Empresa" name="empresa" autoComplete="organization" value={attendee.company} onChange={updateField('company')} />
-            <TextField label="Cargo" name="cargo" autoComplete="organization-title" value={attendee.jobTitle} onChange={updateField('jobTitle')} />
+            <TextField label="Nombre" name="nombre" autoComplete="given-name" value={attendee.firstName} onChange={updateField('firstName')} invalid={invalidFields.has('firstName')} />
+            <TextField label="Apellido" name="apellido" autoComplete="family-name" value={attendee.lastName} onChange={updateField('lastName')} invalid={invalidFields.has('lastName')} />
+            <TextField label="Correo" name="correo" type="email" autoComplete="email" value={attendee.email} onChange={updateField('email')} invalid={invalidFields.has('email')} />
+            <TextField label="Celular" name="celular" type="tel" autoComplete="tel" inputMode="tel" value={attendee.phone} onChange={updateField('phone')} invalid={invalidFields.has('phone')} placeholder="Ej: 0981 123456" />
+            <TextField label="Empresa" name="empresa" autoComplete="organization" value={attendee.company} onChange={updateField('company')} invalid={invalidFields.has('company')} />
+            <TextField label="Cargo" name="cargo" autoComplete="organization-title" value={attendee.jobTitle} onChange={updateField('jobTitle')} invalid={invalidFields.has('jobTitle')} placeholder="Ej: Directora creativa" />
             <p className="sm:col-span-2 text-xs" style={{ color: TEXT_SUBTLE }}>
               Se le asigna el código <span className="tabular-nums" style={{ color: GOLD }}>{nextCode}</span> y le llega la entrada por correo.
             </p>

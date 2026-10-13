@@ -1,6 +1,7 @@
 const escapeCell = (value: string | number | null | undefined) => {
   const text = value === null || value === undefined ? '' : String(value);
-  const safe = /^[=+\-@]/.test(text) ? `'${text}` : text;
+  const isPhoneLike = /^\+[\d\s().-]+$/.test(text);
+  const safe = /^[\t\r]/.test(text) || (/^[=+\-@]/.test(text) && !isPhoneLike) ? `'${text}` : text;
   return /[",\n;]/.test(safe) ? `"${safe.replace(/"/g, '""')}"` : safe;
 };
 
