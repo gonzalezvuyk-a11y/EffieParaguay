@@ -10,6 +10,7 @@ export const EVENT = {
   venue: 'Rogelio',
   mapsUrl: 'https://maps.app.goo.gl/qbLeoBBtPc6juBQLA',
   date: new Date(2026, 9, 15, 19, 30),
+  dressCode: 'Business casual',
   priceUsd: 100,
 };
 

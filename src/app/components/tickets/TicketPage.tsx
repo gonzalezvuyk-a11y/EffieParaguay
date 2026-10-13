@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
-import { CalendarDays, CheckCircle2, Clock, MapPin } from 'lucide-react';
+import { CalendarDays, CheckCircle2, Clock, MapPin, Shirt } from 'lucide-react';
 import {
   EVENT,
   errorMessage,
@@ -107,6 +107,7 @@ export function TicketPage() {
                     <MapPin className="w-4 h-4 mt-0.5" style={{ color: GOLD }} aria-hidden="true" />
                     <a href={EVENT.mapsUrl} target="_blank" rel="noopener noreferrer" className={`underline underline-offset-4 rounded hover:text-white ${focusRing}`}>{EVENT.venue}</a>
                   </li>
+                  <li className="flex gap-3"><Shirt className="w-4 h-4 mt-0.5" style={{ color: GOLD }} aria-hidden="true" />Dress code: {EVENT.dressCode}</li>
                 </ul>
               </div>
 

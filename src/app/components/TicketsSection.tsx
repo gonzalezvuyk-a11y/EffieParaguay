@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowRight, CalendarDays, MapPin, Ticket } from 'lucide-react';
+import { ArrowRight, CalendarDays, MapPin, Shirt, Ticket } from 'lucide-react';
 import { DotsPattern } from './DotsPattern';
 
 const GOLD = '#B89650';
@@ -45,6 +45,10 @@ export function TicketsSection() {
             <span className="flex items-center gap-2">
               <MapPin className="w-4 h-4" style={{ color: GOLD }} aria-hidden="true" />
               Rogelio
+            </span>
+            <span className="flex items-center gap-2">
+              <Shirt className="w-4 h-4" style={{ color: GOLD }} aria-hidden="true" />
+              Dress code: Business casual
             </span>
           </div>
 

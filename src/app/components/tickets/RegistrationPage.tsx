@@ -1,5 +1,5 @@
 import { useId, useState, type FormEvent } from 'react';
-import { CalendarDays, Clock, Mail, MapPin, Ticket, TriangleAlert } from 'lucide-react';
+import { CalendarDays, Clock, Mail, MapPin, Shirt, Ticket, TriangleAlert } from 'lucide-react';
 import { DotsPattern } from '../DotsPattern';
 import {
   EVENT,
@@ -295,6 +295,7 @@ export function RegistrationPage() {
                   {EVENT.venue}
                 </a>
               </li>
+              <li className="flex gap-3"><Shirt className="w-4 h-4 mt-0.5 shrink-0" style={{ color: GOLD }} aria-hidden="true" /><span>Dress code: {EVENT.dressCode}</span></li>
             </ul>
             <dl className="border-t pt-4 space-y-2 text-sm tabular-nums" style={{ borderColor: RULE }}>
               <div className="flex justify-between">
