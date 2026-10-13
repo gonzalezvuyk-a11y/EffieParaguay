@@ -82,6 +82,7 @@ effie-awards-paraguay/
 │   ├── imports/             # Assets importados
 │   └── main.tsx             # Punto de entrada
 ├── public/                  # Archivos estáticos
+├── supabase/                # migrations/ y functions/ (send-ticket: mail con el QR vía Resend)
 ├── package.json             # Dependencias
 └── README.md               # Este archivo
 ```

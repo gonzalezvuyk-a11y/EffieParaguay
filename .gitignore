@@ -9,3 +9,6 @@ dist
 
 # OS files
 .DS_Store
+
+# Supabase CLI cache
+supabase/.temp
