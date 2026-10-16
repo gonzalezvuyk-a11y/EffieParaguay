@@ -15,9 +15,6 @@ const PAGE_TITLE = 'Ganadores 2026 | Effie Paraguay';
 
 const collator = new Intl.Collator('es', { sensitivity: 'base' });
 
-// Same rule as the finalists list: "Oniria TBWA - Paru" counts toward Oniria TBWA.
-const primaryAgency = (value: string) => value.split(' - ')[0].trim();
-
 const pluralize = (count: number, singular: string, plural: string) =>
   `${count} ${count === 1 ? singular : plural}`;
 
@@ -27,22 +24,6 @@ const winnersByAward = AWARDS.map((award) => ({
     .filter((w) => w.award === award)
     .sort((a, b) => collator.compare(a.category, b.category)),
 }));
-
-type AgencyTally = { agency: string } & Record<Award, number>;
-
-const agencyTally: AgencyTally[] = [
-  ...winners
-    .reduce((map, w) => {
-      const agency = primaryAgency(w.agency);
-      const row = map.get(agency) ?? { agency, Oro: 0, Plata: 0, Bronce: 0 };
-      row[w.award] += 1;
-      return map.set(agency, row);
-    }, new Map<string, AgencyTally>())
-    .values(),
-].sort(
-  (a, b) =>
-    b.Oro - a.Oro || b.Plata - a.Plata || b.Bronce - a.Bronce || collator.compare(a.agency, b.agency)
-);
 
 const categoryCount = new Set(finalists.map((f) => f.category)).size;
 
@@ -172,50 +153,6 @@ export function WinnersPage() {
               </section>
             ))}
 
-            <section aria-labelledby="medallero-title">
-              <h2
-                id="medallero-title"
-                className="text-3xl md:text-4xl mb-6 pb-4 border-b"
-                style={{ color: '#FFFFFF', fontWeight: 450, borderColor: RULE }}
-              >
-                Effies por agencia
-              </h2>
-              <div className="overflow-x-auto rounded-2xl border" style={{ backgroundColor: SURFACE, borderColor: RULE }}>
-                <table className="w-full min-w-[28rem] text-sm">
-                  <caption className="sr-only">Cantidad de Effies Oro, Plata y Bronce por agencia</caption>
-                  <thead>
-                    <tr className="border-b text-xs uppercase tracking-[0.15em]" style={{ borderColor: RULE, color: TEXT_SUBTLE }}>
-                      <th scope="col" className="px-5 py-3 text-left font-normal">Agencia</th>
-                      {AWARDS.map((award) => (
-                        <th key={award} scope="col" className="px-4 py-3 text-right font-normal">{award}</th>
-                      ))}
-                      <th scope="col" className="px-5 py-3 text-right font-normal">Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {agencyTally.map((row) => (
-                      <tr key={row.agency} className="border-b last:border-b-0" style={{ borderColor: '#222222' }}>
-                        <th scope="row" translate="no" className="px-5 py-3 text-left font-normal" style={{ color: '#FFFFFF' }}>
-                          {row.agency}
-                        </th>
-                        {AWARDS.map((award) => (
-                          <td
-                            key={award}
-                            className="px-4 py-3 text-right tabular-nums"
-                            style={{ color: row[award] ? AWARD_COLORS[award] : '#666666' }}
-                          >
-                            {row[award]}
-                          </td>
-                        ))}
-                        <td className="px-5 py-3 text-right tabular-nums" style={{ color: '#FFFFFF' }}>
-                          {row.Oro + row.Plata + row.Bronce}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
           </div>
 
           <div className="mt-16 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between rounded-2xl border px-6 py-6"
