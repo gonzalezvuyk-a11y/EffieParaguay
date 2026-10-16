@@ -2,7 +2,8 @@ import { useDeferredValue, useEffect, useId, useMemo, useRef, useState } from 'r
 import { motion, useReducedMotion } from 'motion/react';
 import { ArrowUpRight, ChevronDown, Search, X } from 'lucide-react';
 import { DotsPattern } from './DotsPattern';
-import { finalists, type Finalist } from '../data/finalists';
+import { AwardBadge } from './AwardBadge';
+import { finalists, winners, type Finalist } from '../data/finalists';
 
 const GOLD = '#B89650';
 const INK = '#0a0a0a';
@@ -200,9 +201,17 @@ export function FinalistsPage() {
 
               <div className="max-w-xl">
                 <p className="text-base md:text-lg leading-relaxed text-pretty" style={{ color: TEXT_MUTED }}>
-                  Estos son los casos que el jurado eligió en la primera ronda. Los ganadores de cada
-                  categoría se conocen en la premiación del{' '}
-                  <span className="whitespace-nowrap" style={{ color: '#FFFFFF' }}>{ceremonyLabel}</span>.
+                  Estos son los casos que el jurado eligió en la primera ronda.{' '}
+                  {pluralize(winners.length, 'se llevó', 'se llevaron')} un Effie en la premiación del{' '}
+                  <span className="whitespace-nowrap" style={{ color: '#FFFFFF' }}>{ceremonyLabel}</span>:{' '}
+                  <a
+                    href="/ganadores"
+                    className={`rounded underline decoration-[#B89650]/40 underline-offset-4 transition-colors hover:text-white hover:decoration-[#B89650] ${focusRing}`}
+                    style={{ color: GOLD }}
+                  >
+                    ver los ganadores
+                  </a>
+                  .
                 </p>
                 <p className="mt-4 text-sm tabular-nums" style={{ color: TEXT_SUBTLE }}>
                   {pluralize(finalists.length, 'finalista', 'finalistas')} en{' '}
@@ -387,13 +396,16 @@ export function FinalistsPage() {
                             style={{ borderColor: '#222222' }}
                           >
                             <div className="min-w-0">
-                              <h3
-                                translate="no"
-                                className="text-lg leading-snug text-pretty break-words"
-                                style={{ color: '#FFFFFF', fontWeight: 450 }}
-                              >
-                                {entry.caseName}
-                              </h3>
+                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                                <h3
+                                  translate="no"
+                                  className="text-lg leading-snug text-pretty break-words"
+                                  style={{ color: '#FFFFFF', fontWeight: 450 }}
+                                >
+                                  {entry.caseName}
+                                </h3>
+                                {entry.award && <AwardBadge award={entry.award} size="sm" />}
+                              </div>
                               {otherCategories.length > 0 && (
                                 <p className="mt-1.5 text-xs" style={{ color: TEXT_SUBTLE }}>
                                   También finalista en{' '}

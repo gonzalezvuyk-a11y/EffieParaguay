@@ -1,10 +1,13 @@
 import { motion, useScroll, useTransform } from 'motion/react';
-import { Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import { useRef, useState, useEffect, useMemo } from 'react';
 import effieGif from '../../assets/0a75d0ddf2653507a1ac14e86fc1c8bd276cf698.png';
 import { DotsPattern } from './DotsPattern';
 import { MagneticButton } from './MagneticButton';
+import { AWARDS, AWARD_COLORS } from '../data/awards';
+import { winners } from '../data/finalists';
 
+const CEREMONY_START = new Date('2026-10-15T19:30:00').getTime();
 
 interface TimeLeft {
   days: number;
@@ -155,7 +158,8 @@ export function HeroSection() {
   const interactionWidthRatio = 0.6;
   const interactionHeightRatio = 0.56;
 
-  // Countdown state
+  // Countdown state; once the ceremony starts the countdown gives way to the winners link
+  const [hasCeremonyStarted, setHasCeremonyStarted] = useState(() => Date.now() >= CEREMONY_START);
   const [timeLeft, setTimeLeft] = useState<TimeLeft>({
     days: 0,
     hours: 0,
@@ -164,13 +168,13 @@ export function HeroSection() {
   });
 
   useEffect(() => {
-    const targetDate = new Date('2026-10-15T19:30:00').getTime();
-
     const updateCountdown = () => {
-      const now = new Date().getTime();
-      const distance = targetDate - now;
+      const distance = CEREMONY_START - Date.now();
 
-      if (distance > 0) {
+      if (distance <= 0) {
+        setHasCeremonyStarted(true);
+        clearInterval(interval);
+      } else {
         setTimeLeft({
           days: Math.floor(distance / (1000 * 60 * 60 * 24)),
           hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
@@ -180,8 +184,8 @@ export function HeroSection() {
       }
     };
 
-    updateCountdown();
     const interval = setInterval(updateCountdown, 1000);
+    updateCountdown();
 
     return () => clearInterval(interval);
   }, []);
@@ -482,58 +486,90 @@ export function HeroSection() {
                 medibles y generan impacto real en el mercado paraguayo.
               </motion.p>
 
-              {/* Countdown - Noche de premiación */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 }}
-                className="pt-6 md:pt-8 space-y-4"
-              >
-                <div className="text-center mb-4">
-                  <p className="text-sm uppercase tracking-wider" style={{ color: '#999999' }}>
-                    EVENTO DE PREMIACIÓN · 15 DE OCTUBRE
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {[
-                    { value: timeLeft.days, label: 'Días' },
-                    { value: timeLeft.hours, label: 'Horas' },
-                    { value: timeLeft.minutes, label: 'Minutos' },
-                    { value: timeLeft.seconds, label: 'Segundos' },
-                  ].map((item, index) => (
-                    <div key={index} className="relative group">
-                      <div 
-                        className="absolute inset-0 rounded-2xl blur-xl group-hover:blur-2xl transition-all"
-                        style={{ background: 'linear-gradient(to right, rgba(144, 112, 48, 0.2), rgba(184, 150, 80, 0.2))' }}
-                      />
-                      <div 
-                        className="relative backdrop-blur-sm border rounded-2xl p-4 transition-all"
-                        style={{
-                          backgroundColor: '#111111',
-                          borderColor: '#333333',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#B89650';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '#333333';
-                        }}
-                      >
+              {/* Countdown - Noche de premiación; after it, a link to the winners */}
+              {hasCeremonyStarted ? (
+                <motion.a
+                  href="/ganadores"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                  className="group mt-6 md:mt-8 flex flex-col gap-4 rounded-2xl border p-5 transition-colors hover:border-[#B89650] sm:flex-row sm:items-center sm:justify-between focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B89650]"
+                  style={{ backgroundColor: '#111111', borderColor: '#333333' }}
+                >
+                  <span>
+                    <span className="block text-sm uppercase tracking-wider" style={{ color: '#999999' }}>
+                      Ya tenemos ganadores
+                    </span>
+                    <span className="mt-1 block text-sm tabular-nums">
+                      {AWARDS.map((award, index) => (
+                        <span key={award}>
+                          {index > 0 && <span style={{ color: '#666666' }} aria-hidden="true"> · </span>}
+                          {index > 0 && <span className="sr-only">, </span>}
+                          <span style={{ color: AWARD_COLORS[award] }}>
+                            {winners.filter((w) => w.award === award).length} {award}
+                          </span>
+                        </span>
+                      ))}
+                    </span>
+                  </span>
+                  <span className="inline-flex shrink-0 items-center gap-2 font-medium" style={{ color: '#B89650' }}>
+                    Ver ganadores 2026
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden="true" />
+                  </span>
+                </motion.a>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                  className="pt-6 md:pt-8 space-y-4"
+                >
+                  <div className="text-center mb-4">
+                    <p className="text-sm uppercase tracking-wider" style={{ color: '#999999' }}>
+                      EVENTO DE PREMIACIÓN · 15 DE OCTUBRE
+                    </p>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {[
+                      { value: timeLeft.days, label: 'Días' },
+                      { value: timeLeft.hours, label: 'Horas' },
+                      { value: timeLeft.minutes, label: 'Minutos' },
+                      { value: timeLeft.seconds, label: 'Segundos' },
+                    ].map((item, index) => (
+                      <div key={index} className="relative group">
                         <div 
-                          className="text-2xl md:text-3xl font-mono"
-                          style={{ color: '#B89650', fontWeight: 450 }}
+                          className="absolute inset-0 rounded-2xl blur-xl group-hover:blur-2xl transition-all"
+                          style={{ background: 'linear-gradient(to right, rgba(144, 112, 48, 0.2), rgba(184, 150, 80, 0.2))' }}
+                        />
+                        <div 
+                          className="relative backdrop-blur-sm border rounded-2xl p-4 transition-all"
+                          style={{
+                            backgroundColor: '#111111',
+                            borderColor: '#333333',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = '#B89650';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = '#333333';
+                          }}
                         >
-                          {String(item.value).padStart(2, '0')}
-                        </div>
-                        <div className="text-xs mt-1" style={{ color: '#666666' }}>
-                          {item.label}
+                          <div 
+                            className="text-2xl md:text-3xl font-mono"
+                            style={{ color: '#B89650', fontWeight: 450 }}
+                          >
+                            {String(item.value).padStart(2, '0')}
+                          </div>
+                          <div className="text-xs mt-1" style={{ color: '#666666' }}>
+                            {item.label}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
             </div>
           </div>
         </div>

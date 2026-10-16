@@ -1,7 +1,7 @@
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { AboutSection } from './components/AboutSection';
-import { TicketsSection } from './components/TicketsSection';
+import { WinnersSection } from './components/WinnersSection';
 import { CategoriesSection } from './components/CategoriesSection';
 import { EffieLatamSection } from './components/EffieLatamSection';
 import { OrganizationSection } from './components/OrganizationSection';
@@ -12,6 +12,7 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { JudgesPage } from './components/JudgesPage';
 import { FinalistsPage } from './components/FinalistsPage';
+import { WinnersPage } from './components/WinnersPage';
 import { ScrollProgress } from './components/ScrollProgress';
 import { SectionDivider } from './components/SectionDivider';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
@@ -36,6 +37,7 @@ export default function App() {
   const currentPath = window.location.pathname.replace(/\/+$/, '');
   const isJudgesPage = currentPath === '/jurados';
   const isFinalistsPage = currentPath === '/finalistas';
+  const isWinnersPage = currentPath === '/ganadores';
   const TicketRoute = TICKET_ROUTES[currentPath];
   const isStaffRoute = currentPath === '/entradas/panel' || currentPath === '/entradas/puerta';
 
@@ -129,12 +131,14 @@ export default function App() {
         <JudgesPage />
       ) : isFinalistsPage ? (
         <FinalistsPage />
+      ) : isWinnersPage ? (
+        <WinnersPage />
       ) : (
         <main>
           <HeroSection />
           <SectionDivider />
           <AboutSection />
-          <TicketsSection />
+          <WinnersSection />
           <JudgesPreviewSection />
           <CategoriesSection />
           <SectionDivider />

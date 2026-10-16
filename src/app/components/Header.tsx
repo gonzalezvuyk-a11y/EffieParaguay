@@ -12,6 +12,7 @@ export function Header() {
   const currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
   const isJudgesPage = currentPath === '/jurados';
   const isFinalistsPage = currentPath === '/finalistas';
+  const isWinnersPage = currentPath === '/ganadores';
   const isHomePage = currentPath === '/';
   const sectionHref = (sectionId: string) => isHomePage ? `#${sectionId}` : `/#${sectionId}`;
 
@@ -55,7 +56,11 @@ export function Header() {
 
   const isActive = (sectionId: string) => {
     if (!isHomePage) {
-      return (isJudgesPage && sectionId === 'jurados') || (isFinalistsPage && sectionId === 'finalistas');
+      return (
+        (isJudgesPage && sectionId === 'jurados') ||
+        (isFinalistsPage && sectionId === 'finalistas') ||
+        (isWinnersPage && sectionId === 'ganadores')
+      );
     }
 
     return activeSection === sectionId;
@@ -147,13 +152,14 @@ export function Header() {
               );
             })}
             <motion.a
-              href="/entradas"
+              href="/ganadores"
+              aria-current={isWinnersPage ? 'page' : undefined}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="ml-2 shrink-0 px-5 py-2 rounded-full font-medium transition-all whitespace-nowrap"
               style={{ backgroundColor: '#B89650', color: '#000000' }}
             >
-              Entradas
+              Ganadores 2026
             </motion.a>
           </div>
 
@@ -200,7 +206,8 @@ export function Header() {
                 </motion.a>
               ))}
               <motion.a
-                href="/entradas"
+                href="/ganadores"
+                aria-current={isWinnersPage ? 'page' : undefined}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navItems.length * 0.1 }}
@@ -208,7 +215,7 @@ export function Header() {
                 className="block text-center min-h-11 leading-[2.75rem] rounded-full font-medium"
                 style={{ backgroundColor: '#B89650', color: '#000000' }}
               >
-                Entradas
+                Ganadores 2026
               </motion.a>
             </motion.div>
           )}
