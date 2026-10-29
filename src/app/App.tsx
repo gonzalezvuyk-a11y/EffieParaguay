@@ -6,13 +6,13 @@ import { CategoriesSection } from './components/CategoriesSection';
 import { EffieLatamSection } from './components/EffieLatamSection';
 import { OrganizationSection } from './components/OrganizationSection';
 import { JudgesPreviewSection } from './components/JudgesPreviewSection';
-import { SponsorsSection } from './components/SponsorsSection';
-import { IconSponsorSection } from './components/IconSponsorSection';
+import { PartnersSection } from './components/PartnersSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { JudgesPage } from './components/JudgesPage';
 import { FinalistsPage } from './components/FinalistsPage';
 import { WinnersPage } from './components/WinnersPage';
+import { RankingPage } from './components/RankingPage';
 import { ScrollProgress } from './components/ScrollProgress';
 import { SectionDivider } from './components/SectionDivider';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
@@ -38,6 +38,7 @@ export default function App() {
   const isJudgesPage = currentPath === '/jurados';
   const isFinalistsPage = currentPath === '/finalistas';
   const isWinnersPage = currentPath === '/ganadores';
+  const isRankingPage = currentPath === '/ranking';
   const TicketRoute = TICKET_ROUTES[currentPath];
   const isStaffRoute = currentPath === '/entradas/panel' || currentPath === '/entradas/puerta';
 
@@ -133,6 +134,8 @@ export default function App() {
         <FinalistsPage />
       ) : isWinnersPage ? (
         <WinnersPage />
+      ) : isRankingPage ? (
+        <RankingPage />
       ) : (
         <main>
           <HeroSection />
@@ -146,10 +149,7 @@ export default function App() {
           <SectionDivider />
           <OrganizationSection />
           <SectionDivider />
-          {/* Auspiciantes - Industrias Creativas */}
-          <IconSponsorSection />
-          <SectionDivider />
-          <SponsorsSection />
+          <PartnersSection />
           <SectionDivider />
           <ContactSection />
         </main>

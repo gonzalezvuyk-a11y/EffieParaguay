@@ -51,34 +51,62 @@ export function AboutSection() {
       />
       
       <div className="container mx-auto px-6 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16 max-w-4xl mx-auto"
-        >
-          <h2 className="text-4xl md:text-6xl mb-6" style={{ color: '#1a1a1a' }}>
-            ¿Qué es{' '}
-            <span 
-              style={{
-                background: 'linear-gradient(to right, #B89650, #907030)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                display: 'inline-block',
-              }}
-            >Effie Awards?</span>
-          </h2>
-          <p className="text-xl leading-relaxed" style={{ color: '#4a4a4a' }}>
-            Effie Awards es el único premio que reconoce la efectividad en marketing y comunicación. 
-            Desde su creación en 1968, Effie se ha convertido en el símbolo global de logros en marketing 
-            efectivo, destacando las ideas que funcionan y fomentan el pensamiento estratégico.
-          </p>
-          <p className="text-xl mt-6 leading-relaxed" style={{ color: '#4a4a4a' }}>
-            En Paraguay, celebramos las campañas que no solo son creativas, sino que demuestran 
-            resultados concretos y contribuyen al crecimiento de las marcas y la industria.
-          </p>
-        </motion.div>
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center max-w-7xl mx-auto mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center lg:text-left"
+          >
+            <h2 className="text-4xl md:text-6xl mb-6 text-balance" style={{ color: '#1a1a1a' }}>
+              ¿Qué es{' '}
+              <span 
+                style={{
+                  background: 'linear-gradient(to right, #B89650, #907030)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  display: 'inline-block',
+                }}
+              >Effie Awards?</span>
+            </h2>
+            <p className="text-lg md:text-xl leading-relaxed text-pretty" style={{ color: '#4a4a4a' }}>
+              Effie Awards es el único premio que reconoce la efectividad en marketing y comunicación. 
+              Desde su creación en 1968, Effie se ha convertido en el símbolo global de logros en marketing 
+              efectivo, destacando las ideas que funcionan y fomentan el pensamiento estratégico.
+            </p>
+            <p className="text-lg md:text-xl mt-6 leading-relaxed text-pretty" style={{ color: '#4a4a4a' }}>
+              En Paraguay, celebramos las campañas que no solo son creativas, sino que demuestran 
+              resultados concretos y contribuyen al crecimiento de las marcas y la industria.
+            </p>
+          </motion.div>
+
+          {/* Recap of the 2026 awards night. preload="none" keeps the 11 MB file off the initial load. */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+          >
+            <figure>
+              <video
+                className="w-full aspect-video rounded-2xl border bg-black object-cover"
+                style={{ borderColor: '#e0e0e0' }}
+                src="/video/effie-2026-resumen.mp4"
+                poster="/video/effie-2026-resumen.jpg"
+                width={1280}
+                height={720}
+                controls
+                playsInline
+                preload="none"
+                aria-label="Video resumen de la noche de premiación Effie Paraguay 2026"
+              />
+              <figcaption className="mt-3 text-sm text-center lg:text-left" style={{ color: '#666666' }}>
+                Así se vivió la primera noche de premiación Effie Paraguay, el 15 de octubre de 2026.
+              </figcaption>
+            </figure>
+          </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mt-20">
           {features.map((feature, index) => (

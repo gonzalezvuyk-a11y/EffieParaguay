@@ -13,6 +13,7 @@ export function Footer() {
       { label: 'Entradas', href: '/entradas' },
       { label: 'Categorías', href: sectionHref('categorias') },
       { label: 'Ganadores 2026', href: '/ganadores' },
+      { label: 'Ranking 2026', href: '/ranking' },
       { label: 'Finalistas 2026', href: '/finalistas' },
       { label: 'Jurados 2026', href: '/jurados' },
       { label: 'Effie Index', href: 'https://www.effieindex.com/' },

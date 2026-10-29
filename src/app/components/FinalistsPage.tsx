@@ -404,6 +404,7 @@ export function FinalistsPage() {
                                 >
                                   {entry.caseName}
                                 </h3>
+                                {entry.isGrandEffie && <AwardBadge award="Gran Effie" size="sm" />}
                                 {entry.award && <AwardBadge award={entry.award} size="sm" />}
                               </div>
                               {otherCategories.length > 0 && (

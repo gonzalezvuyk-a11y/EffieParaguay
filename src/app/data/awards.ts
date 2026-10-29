@@ -9,4 +9,7 @@ export const AWARD_COLORS: Record<Award, string> = {
   Bronce: '#C98A5B',
 };
 
+// The Gran Effie goes on top of a case's Oro, so it is a distinction rather than a fourth level.
+export const GRAND_EFFIE_COLOR = '#F2D58C';
+
 export const awardSlug = (award: Award) => `effie-${award.toLowerCase()}`;

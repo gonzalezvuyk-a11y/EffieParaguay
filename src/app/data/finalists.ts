@@ -7,12 +7,13 @@ export type Finalist = {
   agency: string;
   // Set once the ceremony announces it; a finalist without one went home without an Effie.
   award?: Award;
+  isGrandEffie?: boolean;
 };
 
 export type Winner = Finalist & { award: Award };
 
 export const finalists: Finalist[] = [
-  { category: 'Telecomunicaciones', brand: 'Personal', caseName: 'Flow x Flow', agency: 'Wild Fi', award: 'Oro' },
+  { category: 'Telecomunicaciones', brand: 'Personal', caseName: 'Flow x Flow', agency: 'Wild Fi', award: 'Oro', isGrandEffie: true },
   { category: 'Digital Commerce', brand: 'Personal', caseName: 'Keywords de la gente', agency: 'Wild Fi', award: 'Bronce' },
   { category: 'Éxito Sostenido', brand: 'Personal', caseName: 'Personal Más Personal', agency: 'Wild Fi', award: 'Plata' },
   { category: 'Bajo presupuesto - Productos', brand: 'Resacol Forte', caseName: 'Resacol Forte', agency: 'El Creativo', award: 'Plata' },
@@ -37,3 +38,5 @@ export const finalists: Finalist[] = [
 ];
 
 export const winners = finalists.filter((f): f is Winner => f.award !== undefined);
+
+export const grandEffie = winners.find((w) => w.isGrandEffie);

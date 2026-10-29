@@ -1,14 +1,16 @@
-import { Award as AwardIcon } from 'lucide-react';
-import { AWARD_COLORS, type Award } from '../data/awards';
+import { Award as AwardIcon, Crown } from 'lucide-react';
+import { AWARD_COLORS, GRAND_EFFIE_COLOR, type Award } from '../data/awards';
 
 type AwardBadgeProps = {
-  award: Award;
+  award: Award | 'Gran Effie';
   size?: 'sm' | 'md';
 };
 
-/** Medal pill for an Effie level. Always spells the level out so it never relies on color alone. */
+/** Medal pill for an Effie level or the Gran Effie. Always spells it out so it never relies on color alone. */
 export function AwardBadge({ award, size = 'md' }: AwardBadgeProps) {
-  const color = AWARD_COLORS[award];
+  const isGrand = award === 'Gran Effie';
+  const color = isGrand ? GRAND_EFFIE_COLOR : AWARD_COLORS[award];
+  const Icon = isGrand ? Crown : AwardIcon;
   return (
     <span
       className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border whitespace-nowrap ${
@@ -16,8 +18,8 @@ export function AwardBadge({ award, size = 'md' }: AwardBadgeProps) {
       }`}
       style={{ color, borderColor: `${color}66`, backgroundColor: `${color}14`, fontWeight: 500 }}
     >
-      <AwardIcon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} aria-hidden="true" />
-      Effie {award}
+      <Icon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4'} aria-hidden="true" />
+      {isGrand ? 'Gran Effie' : `Effie ${award}`}
     </span>
   );
 }

@@ -3,16 +3,17 @@ import { ArrowRight, Trophy } from 'lucide-react';
 import { DotsPattern } from './DotsPattern';
 import { AwardBadge } from './AwardBadge';
 import { AWARDS, AWARD_COLORS } from '../data/awards';
-import { winners } from '../data/finalists';
+import { grandEffie, winners } from '../data/finalists';
 
 const GOLD = '#B89650';
 
 const collator = new Intl.Collator('es', { sensitivity: 'base' });
+// Gran Effie first, then the other Oros by category.
 const goldWinners = winners
   .filter((w) => w.award === 'Oro')
-  .sort((a, b) => collator.compare(a.category, b.category));
+  .sort((a, b) => Number(Boolean(b.isGrandEffie)) - Number(Boolean(a.isGrandEffie)) || collator.compare(a.category, b.category));
 
-/** Home teaser for the 2026 winners: medal count and the Oro cases, linking to /ganadores. */
+/** Home teaser for the 2026 winners: Gran Effie, medal count and the Oro cases, linking to /ganadores. */
 export function WinnersSection() {
   return (
     <section
@@ -44,6 +45,14 @@ export function WinnersSection() {
 
           <p className="text-lg leading-relaxed text-pretty" style={{ color: '#B8B8B8' }}>
             Estos son los casos más efectivos del año en Paraguay, premiados el 15 de octubre.
+            {grandEffie && (
+              <>
+                {' '}El Gran Effie fue para{' '}
+                <span translate="no" style={{ color: '#FFFFFF' }}>{grandEffie.caseName}</span>, de{' '}
+                <span translate="no" style={{ color: '#FFFFFF' }}>{grandEffie.brand}</span> y{' '}
+                <span translate="no" style={{ color: GOLD }}>{grandEffie.agency}</span>.
+              </>
+            )}
           </p>
 
           <p className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm tabular-nums">
@@ -66,7 +75,10 @@ export function WinnersSection() {
               className="flex flex-col gap-3 rounded-2xl border p-5"
               style={{ backgroundColor: 'rgba(17, 17, 17, 0.72)', borderColor: '#2a2a2a' }}
             >
-              <AwardBadge award={winner.award} size="sm" />
+              <div className="flex flex-wrap gap-2">
+                {winner.isGrandEffie && <AwardBadge award="Gran Effie" size="sm" />}
+                <AwardBadge award={winner.award} size="sm" />
+              </div>
               <p className="text-xs uppercase tracking-[0.15em]" style={{ color: '#999999' }}>
                 {winner.category}
               </p>
@@ -83,7 +95,7 @@ export function WinnersSection() {
           ))}
         </ul>
 
-        <div className="text-center mt-12">
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <motion.a
             href="/ganadores"
             whileHover={{ scale: 1.02 }}
@@ -94,6 +106,13 @@ export function WinnersSection() {
             <span>Ver todos los ganadores</span>
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
           </motion.a>
+          <a
+            href="/ranking"
+            className="inline-flex min-h-11 items-center px-8 py-4 rounded-full border font-medium transition-colors hover:border-[#B89650] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B89650]"
+            style={{ borderColor: '#444444', color: GOLD }}
+          >
+            Ver ranking 2026
+          </a>
         </div>
       </div>
     </section>

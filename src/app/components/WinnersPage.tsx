@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Crown } from 'lucide-react';
 import { DotsPattern } from './DotsPattern';
-import { AWARDS, AWARD_COLORS, awardSlug, type Award } from '../data/awards';
-import { finalists, winners, type Winner } from '../data/finalists';
+import { AwardBadge } from './AwardBadge';
+import { AWARDS, AWARD_COLORS, GRAND_EFFIE_COLOR, awardSlug } from '../data/awards';
+import { finalists, grandEffie, winners, type Winner } from '../data/finalists';
 
 const GOLD = '#B89650';
 const INK = '#0a0a0a';
@@ -35,6 +36,7 @@ function WinnerCard({ winner }: { winner: Winner }) {
       className="flex h-full flex-col gap-3 rounded-2xl border p-5 md:p-6"
       style={{ backgroundColor: SURFACE, borderColor: RULE, borderTopColor: AWARD_COLORS[winner.award] }}
     >
+      {winner.isGrandEffie && <AwardBadge award="Gran Effie" size="sm" />}
       <p className="text-xs uppercase tracking-[0.15em] text-pretty" style={{ color: TEXT_SUBTLE }}>
         {winner.category}
       </p>
@@ -104,6 +106,48 @@ export function WinnersPage() {
             </div>
           </motion.header>
 
+          {grandEffie && (
+            <section
+              aria-labelledby="gran-effie-title"
+              className="relative mb-6 overflow-hidden rounded-3xl border p-6 md:p-10"
+              style={{
+                borderColor: `${GRAND_EFFIE_COLOR}55`,
+                background: `radial-gradient(circle at 85% 20%, ${GRAND_EFFIE_COLOR}1f, transparent 55%), ${SURFACE}`,
+              }}
+            >
+              <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+                <div className="min-w-0">
+                  <h2
+                    id="gran-effie-title"
+                    className="flex items-center gap-2 text-sm uppercase tracking-[0.2em] mb-4"
+                    style={{ color: GRAND_EFFIE_COLOR, fontWeight: 500 }}
+                  >
+                    <Crown className="w-4 h-4" aria-hidden="true" />
+                    Gran Effie 2026
+                  </h2>
+                  <p
+                    translate="no"
+                    className="text-4xl md:text-6xl leading-[1.05] text-balance break-words"
+                    style={{ color: '#FFFFFF', fontWeight: 450 }}
+                  >
+                    {grandEffie.caseName}
+                  </p>
+                  <p className="mt-4 max-w-xl text-base md:text-lg text-pretty" style={{ color: TEXT_MUTED }}>
+                    El máximo reconocimiento de la primera edición de Effie Paraguay.
+                  </p>
+                </div>
+                <dl className="grid shrink-0 grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm md:text-base">
+                  <dt style={{ color: TEXT_SUBTLE }}>Marca</dt>
+                  <dd translate="no" style={{ color: '#FFFFFF' }}>{grandEffie.brand}</dd>
+                  <dt style={{ color: TEXT_SUBTLE }}>Agencia</dt>
+                  <dd translate="no" style={{ color: GOLD }}>{grandEffie.agency}</dd>
+                  <dt style={{ color: TEXT_SUBTLE }}>Categoría</dt>
+                  <dd style={{ color: TEXT_MUTED }}>{grandEffie.category}</dd>
+                </dl>
+              </div>
+            </section>
+          )}
+
           <nav aria-label="Niveles de premio" className="mb-12 md:mb-16">
             <ul className="grid grid-cols-3 gap-3">
               {winnersByAward.map(({ award, entries }) => (
@@ -159,16 +203,25 @@ export function WinnersPage() {
             style={{ backgroundColor: SURFACE, borderColor: RULE }}
           >
             <p className="text-pretty" style={{ color: TEXT_MUTED }}>
-              ¿Querés ver todos los casos que llegaron a la final?
+              ¿Querés ver todos los casos que llegaron a la final, o qué agencias y avisadores sumaron más puntos?
             </p>
-            <a
-              href="/finalistas"
-              className={`group inline-flex min-h-11 shrink-0 items-center gap-2 px-6 rounded-full font-medium transition-colors touch-manipulation hover:bg-[#d1b06a] ${focusRing}`}
-              style={{ backgroundColor: GOLD, color: '#000000' }}
-            >
-              Ver finalistas
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden="true" />
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href="/ranking"
+                className={`inline-flex min-h-11 shrink-0 items-center px-6 rounded-full border font-medium transition-colors touch-manipulation hover:border-[#B89650] hover:text-white ${focusRing}`}
+                style={{ borderColor: '#444444', color: GOLD }}
+              >
+                Ver ranking
+              </a>
+              <a
+                href="/finalistas"
+                className={`group inline-flex min-h-11 shrink-0 items-center gap-2 px-6 rounded-full font-medium transition-colors touch-manipulation hover:bg-[#d1b06a] ${focusRing}`}
+                style={{ backgroundColor: GOLD, color: '#000000' }}
+              >
+                Ver finalistas
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden="true" />
+              </a>
+            </div>
           </div>
         </div>
       </div>

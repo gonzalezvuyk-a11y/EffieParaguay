@@ -13,6 +13,7 @@ export function Header() {
   const isJudgesPage = currentPath === '/jurados';
   const isFinalistsPage = currentPath === '/finalistas';
   const isWinnersPage = currentPath === '/ganadores';
+  const isRankingPage = currentPath === '/ranking';
   const isHomePage = currentPath === '/';
   const sectionHref = (sectionId: string) => isHomePage ? `#${sectionId}` : `/#${sectionId}`;
 
@@ -49,6 +50,7 @@ export function Header() {
     { label: 'Effie LATAM', href: sectionHref('effie-latam'), sectionId: 'effie-latam' },
     { label: 'Organización', href: sectionHref('organizacion'), sectionId: 'organizacion' },
     { label: 'Finalistas', href: '/finalistas', sectionId: 'finalistas' },
+    { label: 'Ranking', href: '/ranking', sectionId: 'ranking' },
     { label: 'Jurados', href: '/jurados', sectionId: 'jurados' },
     { label: 'Aliados', href: sectionHref('aliados'), sectionId: 'aliados' },
     { label: 'Contacto', href: sectionHref('contacto'), sectionId: 'contacto' },
@@ -59,7 +61,8 @@ export function Header() {
       return (
         (isJudgesPage && sectionId === 'jurados') ||
         (isFinalistsPage && sectionId === 'finalistas') ||
-        (isWinnersPage && sectionId === 'ganadores')
+        (isWinnersPage && sectionId === 'ganadores') ||
+        (isRankingPage && sectionId === 'ranking')
       );
     }
 
